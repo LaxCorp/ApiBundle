@@ -9,7 +9,7 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\Invoice;
-use AppApiBundle\Model\InputInvoice;
+use LaxCorp\ApiBundle\Model\InputInvoice;
 
 /**
  * @Rest\RouteResource("Invoice", pluralize=false)

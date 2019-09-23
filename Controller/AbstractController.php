@@ -5,30 +5,31 @@ namespace LaxCorp\ApiBundle\Controller;
 use LaxCorp\ApiBundle\Helper\DoctrineMatcherResult;
 use LaxCorp\ApiBundle\Services\DoctrineMatcher;
 use Doctrine\ORM\EntityRepository;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\Exclusion\GroupsExclusionStrategy;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use JMS\Serializer\Serializer;
-
+use JMS\Serializer\SerializerInterface;
+use LaxCorp\BillingPartnerBundle\Helper\VersionHelper as BillingVersionHelper;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class BaseController
  *
  * @package LaxCorp\ApiBundle\Controller
  */
-abstract class AbstractController extends FOSRestController
+abstract class AbstractController extends AbstractFOSRestController
 {
 
     /**
-     * @var DoctrineMatcher 
+     * @var DoctrineMatcher
      */
     public $doctrineMatcher;
 
     /**
-     * @var Serializer
+     * @var SerializerInterface
      */
     public $jmsSerializer;
 
@@ -37,15 +38,22 @@ abstract class AbstractController extends FOSRestController
      */
     public $kernel;
 
+    /**
+     * @var BillingVersionHelper
+     */
+    public $billingVersionHelper;
+
+
     public function __construct(
         DoctrineMatcher $doctrineMatcher,
-        Serializer $jmsSerializer,
-        KernelInterface $kernel
-    )
-    {
-        $this->doctrineMatcher = $doctrineMatcher;
-        $this->jmsSerializer = $jmsSerializer;
-        $this->kernel = $kernel;
+        SerializerInterface $jmsSerializer,
+        KernelInterface $kernel,
+        BillingVersionHelper $billingVersionHelper
+    ) {
+        $this->doctrineMatcher      = $doctrineMatcher;
+        $this->jmsSerializer        = $jmsSerializer;
+        $this->kernel               = $kernel;
+        $this->billingVersionHelper = $billingVersionHelper;
     }
 
     /**

@@ -8,7 +8,7 @@ use Nelmio\ApiDocBundle\Annotation\Operation;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
-use AppApiBundle\Model\InputCharge;
+use LaxCorp\ApiBundle\Model\InputCharge;
 use BillingApiBundle\Services\Api\Api as BillingApi;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

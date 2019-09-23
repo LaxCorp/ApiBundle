@@ -2,7 +2,7 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use AppApiBundle\Form\DocumentType;
+use LaxCorp\ApiBundle\Form\DocumentType;
 use App\Entity\Client;
 use App\Entity\Documents;
 use FOS\RestBundle\Controller\Annotations as REST;

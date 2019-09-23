@@ -9,10 +9,12 @@
 namespace LaxCorp\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as REST;
+use JMS\Serializer\Serializer;
+use LaxCorp\ApiBundle\Services\DoctrineMatcher;
+use LaxCorp\BillingPartnerBundle\Helper\VersionHelper as BillingVersionHelper;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
-use LaxCorp\BillingPartnerBundle\Helper\VersionHelper;
 
 
 /**
@@ -20,6 +22,7 @@ use LaxCorp\BillingPartnerBundle\Helper\VersionHelper;
  */
 class TestController extends AbstractController
 {
+
     /**
      * @Operation(
      *     tags={"Проверка соединения (test)"},
@@ -39,12 +42,12 @@ class TestController extends AbstractController
      * )
      *
      */
-    public function getAction(VersionHelper $versionHelper)
+    public function getAction()
     {
         $build_time = new \DateTime();
         $build_time->setTimestamp(filemtime($this->kernel->getProjectDir()));
 
-        $billingVersion = $versionHelper->getVersion();
+        $billingVersion = $this->billingVersionHelper->getVersion();
 
         $version = [
             'current_time' => new \DateTime(),

@@ -3,7 +3,7 @@
 namespace LaxCorp\ApiBundle\Controller;
 
 use App\Entity\Client;
-use AppApiBundle\Model\InputCounteragent;
+use LaxCorp\ApiBundle\Model\InputCounteragent;
 use App\Entity\Company;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as REST;

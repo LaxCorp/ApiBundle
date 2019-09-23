@@ -2,7 +2,7 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use AppApiBundle\Model\SearchCompanyChangeRequest;
+use LaxCorp\ApiBundle\Model\SearchCompanyChangeRequest;
 use App\Entity\Client;
 use App\Entity\CompanyChangeRequest;
 use FOS\RestBundle\Controller\Annotations as REST;

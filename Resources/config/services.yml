@@ -4,4 +4,6 @@ services:
         autoconfigure: true
         public: true
 
-    LaxCorp\ApiBundle\Services\DoctrineMatcher:
+    LaxCorp\ApiBundle\:
+        resource: '../../*'
+        exclude: '../../{DependencyInjection,Entity,Migrations,Tests,Kernel.php,Helper/DoctrineMatcherResult.php}'

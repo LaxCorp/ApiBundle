@@ -2,8 +2,8 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use AppApiBundle\Form\CreateReportErrorType;
-use AppApiBundle\Model\InputCustomerRequest;
+use LaxCorp\ApiBundle\Form\CreateReportErrorType;
+use LaxCorp\ApiBundle\Model\InputCustomerRequest;
 use App\Entity\CustomerRequest;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Nelmio\ApiDocBundle\Annotation\Operation;

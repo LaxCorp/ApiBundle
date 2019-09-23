@@ -2,8 +2,8 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use AppApiBundle\Form\LoginStatusType;
-use AppApiBundle\Model\LoginStatus;
+use LaxCorp\ApiBundle\Form\LoginStatusType;
+use LaxCorp\ApiBundle\Model\LoginStatus;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -33,7 +33,7 @@ class LoginStatusController extends AbstractController
      *     @SWG\Response(
      *         response="200",
      *         description="Returned when successful",
-     *         @SWG\Schema(ref=@Model(type="AppApiBundle\Model\LoginStatus"))
+     *         @SWG\Schema(ref=@Model(type="LaxCorp\ApiBundle\Model\LoginStatus"))
      *     ),
      *     @SWG\Response(
      *         response="400",

@@ -2,11 +2,11 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use AppApiBundle\Model\InputPatchPayment;
+use LaxCorp\ApiBundle\Model\InputPatchPayment;
 use App\Entity\Client;
 use App\Entity\Invoice;
 use App\Entity\Payment;
-use AppApiBundle\Model\InputPayment;
+use LaxCorp\ApiBundle\Model\InputPayment;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\Operation;

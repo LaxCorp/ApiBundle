@@ -2,7 +2,7 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use AppApiBundle\Model\InputReconciliationRequest;
+use LaxCorp\ApiBundle\Model\InputReconciliationRequest;
 use App\Entity\Client;
 use App\Entity\ReconciliationRequest;
 use FOS\RestBundle\Controller\Annotations as Rest;

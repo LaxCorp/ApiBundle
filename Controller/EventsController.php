@@ -2,8 +2,8 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use AppApiBundle\Model\InputPatchEvents;
-use AppApiBundle\Model\InputEvents;
+use LaxCorp\ApiBundle\Model\InputPatchEvents;
+use LaxCorp\ApiBundle\Model\InputEvents;
 use App\Entity\Events1c;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Request\ParamFetcherInterface;
