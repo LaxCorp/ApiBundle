@@ -4,7 +4,7 @@ namespace LaxCorp\ApiBundle\Controller;
 
 use AppApiBundle\Model\InputPatchEvents;
 use AppApiBundle\Model\InputEvents;
-use AppBundle\Entity\Events1c;
+use App\Entity\Events1c;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\Operation;

@@ -2,7 +2,7 @@
 
 namespace LaxCorp\ApiBundle\Form;
 
-use AppBundle\Entity\CustomerRequest;
+use App\Entity\CustomerRequest;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

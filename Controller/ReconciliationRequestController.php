@@ -3,8 +3,8 @@
 namespace LaxCorp\ApiBundle\Controller;
 
 use AppApiBundle\Model\InputReconciliationRequest;
-use AppBundle\Entity\Client;
-use AppBundle\Entity\ReconciliationRequest;
+use App\Entity\Client;
+use App\Entity\ReconciliationRequest;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\Operation;

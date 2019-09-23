@@ -2,7 +2,7 @@
 
 namespace LaxCorp\ApiBundle\Form;
 
-use AppBundle\Entity\Documents;
+use App\Entity\Documents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

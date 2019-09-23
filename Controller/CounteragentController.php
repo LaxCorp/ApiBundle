@@ -2,10 +2,10 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use AppBundle\Entity\Client;
+use App\Entity\Client;
 use AppApiBundle\Model\InputCounteragent;
-use AppBundle\Entity\Company;
-use AppBundle\Entity\User;
+use App\Entity\Company;
+use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\Operation;

@@ -3,8 +3,8 @@
 namespace LaxCorp\ApiBundle\Controller;
 
 use AppApiBundle\Form\DocumentType;
-use AppBundle\Entity\Client;
-use AppBundle\Entity\Documents;
+use App\Entity\Client;
+use App\Entity\Documents;
 use FOS\RestBundle\Controller\Annotations as REST;
 use http\Exception\InvalidArgumentException;
 use Nelmio\ApiDocBundle\Annotation\Operation;

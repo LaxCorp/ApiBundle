@@ -3,8 +3,8 @@
 namespace LaxCorp\ApiBundle\Controller;
 
 use AppApiBundle\Model\SearchCompanyChangeRequest;
-use AppBundle\Entity\Client;
-use AppBundle\Entity\CompanyChangeRequest;
+use App\Entity\Client;
+use App\Entity\CompanyChangeRequest;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\Operation;

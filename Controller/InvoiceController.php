@@ -8,7 +8,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 
-use AppBundle\Entity\Invoice;
+use App\Entity\Invoice;
 use AppApiBundle\Model\InputInvoice;
 
 /**
@@ -122,7 +122,7 @@ class InvoiceController extends AbstractController
      *     @SWG\Response(
      *         response="200",
      *         description="Returned when successful",
-     *         @SWG\Schema(ref=@Model(type="AppBundle\Entity\Invoice"))
+     *         @SWG\Schema(ref=@Model(type="App\Entity\Invoice"))
      *     )
      * )
      *

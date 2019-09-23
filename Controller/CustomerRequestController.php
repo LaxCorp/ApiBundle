@@ -4,7 +4,7 @@ namespace LaxCorp\ApiBundle\Controller;
 
 use AppApiBundle\Form\CreateReportErrorType;
 use AppApiBundle\Model\InputCustomerRequest;
-use AppBundle\Entity\CustomerRequest;
+use App\Entity\CustomerRequest;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -86,7 +86,7 @@ class CustomerRequestController extends AbstractController
      *     @SWG\Response(
      *         response="200",
      *         description="Returned when successful|not found",
-     *         @SWG\Schema(ref=@Model(type="AppBundle\Entity\CustomerRequest"))
+     *         @SWG\Schema(ref=@Model(type="App\Entity\CustomerRequest"))
      *     ),
      *     @SWG\Response(
      *         response="403",
@@ -171,7 +171,7 @@ class CustomerRequestController extends AbstractController
      *     @SWG\Response(
      *         response="200",
      *         description="Returned when successful",
-     *         @SWG\Schema(ref=@Model(type="AppBundle\Entity\CustomerRequest"))
+     *         @SWG\Schema(ref=@Model(type="App\Entity\CustomerRequest"))
      *     )
      * )
      *
@@ -366,7 +366,7 @@ class CustomerRequestController extends AbstractController
 
             $em = $this->getDoctrine()->getManager();
 
-            $requestComponentRepository = $em->getRepository('AppBundle:RequestComponent');
+            $requestComponentRepository = $em->getRepository('App:RequestComponent');
 
             $sectionName = $this->getParameter('jira_customer_request_section_name');
 

@@ -3,9 +3,9 @@
 namespace LaxCorp\ApiBundle\Controller;
 
 use AppApiBundle\Model\InputPatchPayment;
-use AppBundle\Entity\Client;
-use AppBundle\Entity\Invoice;
-use AppBundle\Entity\Payment;
+use App\Entity\Client;
+use App\Entity\Invoice;
+use App\Entity\Payment;
 use AppApiBundle\Model\InputPayment;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Request\ParamFetcherInterface;
