@@ -1,0 +1,59 @@
+test:
+    type: rest
+    resource: "@ApiBundle/Controller/TestController.php"
+    prefix: /v1
+
+counteragent:
+    type: rest
+    resource: "@ApiBundle/Controller/CounteragentController.php"
+    prefix: /v1
+
+invoice:
+    type: rest
+    resource: "@ApiBundle/Controller/InvoiceController.php"
+    prefix: /v1
+
+payment:
+    type: rest
+    resource: "@ApiBundle/Controller/PaymentController.php"
+    prefix: /v1
+
+charge:
+    type: rest
+    resource: "@ApiBundle/Controller/ChargeController.php"
+    prefix: /v1
+
+document:
+    type: rest
+    resource: "@ApiBundle/Controller/DocumentController.php"
+    prefix: /v1
+
+reconciliation_request:
+    type: rest
+    resource: "@ApiBundle/Controller/ReconciliationRequestController.php"
+    prefix: /v1
+
+counteragent_datarequest:
+    type: rest
+    resource: "@ApiBundle/Controller/CounteragentDataRequestController.php"
+    prefix: /v1
+
+events:
+    type: rest
+    resource: "@ApiBundle/Controller/EventsController.php"
+    prefix: /v1
+
+customer_request:
+    type: rest
+    resource: "@ApiBundle/Controller/CustomerRequestController.php"
+    prefix: /v1
+
+login_status:
+    type: rest
+    resource: "@ApiBundle/Controller/LoginStatusController.php"
+    prefix: /v1
+
+#sonata_api_media:
+#    type:         rest
+#    prefix:       /v1
+#    resource:     "@SonataMediaBundle/Resources/config/routing/api.xml"

@@ -1,0 +1,24 @@
+{
+  "name": "laxcorp/api-bundle",
+  "description": "Billing helper",
+  "type": "symfony-bundle",
+  "homepage": "https://github.com/LaxCorp/ApiBundle",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "Lax Corp",
+      "email": "LaxCorp@mail.ru"
+    }
+  ],
+  "require": {
+    "php": "^7.2"
+  },
+  "suggest": {
+  },
+  "autoload": {
+    "psr-4": {
+      "LaxCorp\\ApiBundle\\": ""
+    }
+  }
+}
