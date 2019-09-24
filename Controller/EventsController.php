@@ -248,7 +248,7 @@ class EventsController extends AbstractController
 
         $eventUpdated = $this->patchClass($events1c, $input, $requestFields);
 
-        $violations = $this->get('validator')->validate($eventUpdated);
+        $violations = $this->validator->validate($eventUpdated);
 
         if ($violations->count() != 0) {
             /** @var ConstraintViolation $violation */

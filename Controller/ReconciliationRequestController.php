@@ -256,7 +256,7 @@ class ReconciliationRequestController extends AbstractController
 
         $paymentUpdated = $this->patchClass($reconciliationRequest, $input, $requestFields);
 
-        $violations = $this->get('validator')->validate($paymentUpdated);
+        $violations = $this->validator->validate($paymentUpdated);
 
         if ($violations->count() != 0) {
             /** @var ConstraintViolation $violation */

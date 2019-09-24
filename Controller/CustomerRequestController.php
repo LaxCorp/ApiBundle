@@ -297,7 +297,7 @@ class CustomerRequestController extends AbstractController
                 return $this->errorView($conflicts, $invalid);
             }
 
-            $violations = $this->get('validator')->validate($customerRequest);
+            $violations = $this->validator->validate($customerRequest);
 
             if ($violations->count() != 0) {
                 /** @var ConstraintViolation $violation */

@@ -73,7 +73,7 @@ class LoginStatusController extends AbstractController
         $input  = $this->requestMap(LoginStatus::class, $request->query->all());
         $output = $input;
 
-        $violations = $this->get('validator')->validate($input);
+        $violations = $this->validator->validate($input);
 
         if ($violations->count() != 0) {
             /** @var ConstraintViolation $violation */

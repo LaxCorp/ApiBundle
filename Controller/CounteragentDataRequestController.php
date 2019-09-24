@@ -349,7 +349,7 @@ class CounteragentDataRequestController extends AbstractController
 
         $entityUpdated = $this->patchClass($entity, $input, $requestFields);
 
-        $violations = $this->get('validator')->validate($entityUpdated);
+        $violations = $this->validator->validate($entityUpdated);
 
         if ($violations->count() != 0) {
 

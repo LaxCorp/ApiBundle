@@ -52,66 +52,66 @@ class PaymentController extends AbstractController
      *     ),
      *     @SWG\Parameter(
      *         name="uuid1c",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="created",
-     *         in="body",
+     *         in="query",
      *         description="readOnly",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="invoice_id",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="integer")
+     *         type="integer"
      *     ),
      *     @SWG\Parameter(
      *         name="amount",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="comission",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="couteragent_id",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="integer")
+     *         type="integer"
      *     ),
      *     @SWG\Parameter(
      *         name="payment_type",
-     *         in="body",
+     *         in="query",
      *         description="BANK | ONLINE",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="type",
-     *         in="body",
+     *         in="query",
      *         description="REFILL | MONEYBACK",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="description",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -331,7 +331,7 @@ class PaymentController extends AbstractController
             return $this->errorView($conflicts, $invalid);
         }
 
-        $violations = $this->get('validator')->validate($paymentUpdated);
+        $violations = $this->validator->validate($paymentUpdated);
 
         if ($violations->count() != 0) {
             /** @var ConstraintViolation $violation */
@@ -374,24 +374,23 @@ class PaymentController extends AbstractController
         return $this->handleView($view);
     }
 
-
     /**
      * @Operation(
      *     tags={"Оплата (payment)"},
      *     summary="",
      *     @SWG\Parameter(
      *         name="uuid1c",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="invoice_id",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="integer")
+     *         type="integer"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -454,7 +453,7 @@ class PaymentController extends AbstractController
             return $this->errorView($conflicts, $invalid);
         }
 
-        $violations = $this->get('validator')->validate($paymentUpdated);
+        $violations = $this->validator->validate($paymentUpdated);
 
         if ($violations->count() != 0) {
             /** @var ConstraintViolation $violation */
@@ -662,7 +661,6 @@ class PaymentController extends AbstractController
 
         return $fields;
     }
-
 
     /**
      * @param $_order

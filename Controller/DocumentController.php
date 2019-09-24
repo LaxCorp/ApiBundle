@@ -331,7 +331,7 @@ class DocumentController extends AbstractController
 
             $documents->setClient($this->getClient($documents->getCounteragentId()));
 
-            $violations = $this->get('validator')->validate($documents);
+            $violations = $this->validator->validate($documents);
 
             if ($violations->count() != 0) {
                 /** @var ConstraintViolation $violation */
@@ -426,7 +426,7 @@ class DocumentController extends AbstractController
                 $oldDocument->setFileInfo($documents->getFileInfo());
             }
 
-            $violations = $this->get('validator')->validate($oldDocument);
+            $violations = $this->validator->validate($oldDocument);
 
             if ($violations->count() != 0) {
                 /** @var ConstraintViolation $violation */
