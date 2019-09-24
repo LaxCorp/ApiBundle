@@ -24,7 +24,7 @@ class CounteragentController extends AbstractController
 
     /**
      * @Operation(
-     *     tags={"Данные контрагента (counteragent)"},
+     *     tags={"Получить данные контрагента (counteragent)"},
      *     summary="",
      *     @SWG\Parameter(
      *         name="_limit",
@@ -42,101 +42,101 @@ class CounteragentController extends AbstractController
      *     ),
      *     @SWG\Parameter(
      *         name="uuid1c",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="country_code",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="name",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="inn",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="kpp",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="reg_number",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="tax_number",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="juridical_address",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="post_address",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="contact_name",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="contact_email",
-     *         in="body",
+     *         in="query",
      *         description="ReadOnly",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="contact_phone",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="data_checked",
-     *         in="body",
+     *         in="query",
      *         description="details of the organization filled",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Parameter(
      *         name="waspayment",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -180,7 +180,7 @@ class CounteragentController extends AbstractController
 
     /**
      * @Operation(
-     *     tags={"Данные контрагента (counteragent)"},
+     *     tags={"Получить данные контрагента (counteragent)"},
      *     summary="",
      *     @SWG\Response(
      *         response="200",
@@ -215,105 +215,105 @@ class CounteragentController extends AbstractController
 
     /**
      * @Operation(
-     *     tags={"Данные контрагента (counteragent)"},
+     *     tags={"Частично обновить данные контрагента (Path counteragent)"},
      *     summary="",
      *     @SWG\Parameter(
      *         name="uuid1c",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="country_code",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="name",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="inn",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="kpp",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="reg_number",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="tax_number",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="juridical_address",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="post_address",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="contact_name",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="contact_email",
-     *         in="body",
+     *         in="formData",
      *         description="ReadOnly",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="contact_phone",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="data_checked",
-     *         in="body",
+     *         in="formData",
      *         description="details of the organization filled",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Parameter(
      *         name="waspayment",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -339,12 +339,14 @@ class CounteragentController extends AbstractController
 
         $requestFields = $request->request->all();
 
+        dump($requestFields);
+
         /** @var InputCounteragent $input */
         $input = $this->requestMap(InputCounteragent::class, $requestFields);
 
         $clientUpdated = $this->patchClass($client, $input, $requestFields);
 
-        $violations = $this->get('validator')->validate($clientUpdated);
+        $violations = $this->validator->validate($clientUpdated);
 
         if ($violations->count() != 0) {
 
@@ -405,8 +407,7 @@ class CounteragentController extends AbstractController
         }
 
         // отключить создание событий для данного update
-        $couneragentUpdateSubscriber = $this->get('app.counteragent_update_subscriber');
-        $couneragentUpdateSubscriber->setDisabled(true);
+        $this->counteragentUpdateSubscriber->setDisabled(true);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($clientUpdated);

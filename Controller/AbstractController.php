@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use JMS\Serializer\SerializerInterface;
 use LaxCorp\BillingPartnerBundle\Helper\VersionHelper as BillingVersionHelper;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\EventListener\CounteragentUpdateSubscriber;
 
 /**
  * Class BaseController
@@ -43,17 +45,31 @@ abstract class AbstractController extends AbstractFOSRestController
      */
     public $billingVersionHelper;
 
+    /**
+     * @var ValidatorInterface
+     */
+    public $validator;
+
+    /**
+     * @var CounteragentUpdateSubscriber
+     */
+    public $counteragentUpdateSubscriber;
+
 
     public function __construct(
         DoctrineMatcher $doctrineMatcher,
         SerializerInterface $jmsSerializer,
         KernelInterface $kernel,
-        BillingVersionHelper $billingVersionHelper
+        BillingVersionHelper $billingVersionHelper,
+        ValidatorInterface $validator,
+        CounteragentUpdateSubscriber $counteragentUpdateSubscriber
     ) {
-        $this->doctrineMatcher      = $doctrineMatcher;
-        $this->jmsSerializer        = $jmsSerializer;
-        $this->kernel               = $kernel;
-        $this->billingVersionHelper = $billingVersionHelper;
+        $this->doctrineMatcher              = $doctrineMatcher;
+        $this->jmsSerializer                = $jmsSerializer;
+        $this->kernel                       = $kernel;
+        $this->billingVersionHelper         = $billingVersionHelper;
+        $this->validator                    = $validator;
+        $this->counteragentUpdateSubscriber = $counteragentUpdateSubscriber;
     }
 
     /**
