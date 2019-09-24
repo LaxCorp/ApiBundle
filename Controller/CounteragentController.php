@@ -24,7 +24,7 @@ class CounteragentController extends AbstractController
 
     /**
      * @Operation(
-     *     tags={"Получить данные контрагента (counteragent)"},
+     *     tags={"Поиск контрагента (Search counteragent)"},
      *     summary="",
      *     @SWG\Parameter(
      *         name="_limit",
@@ -180,7 +180,7 @@ class CounteragentController extends AbstractController
 
     /**
      * @Operation(
-     *     tags={"Получить данные контрагента (counteragent)"},
+     *     tags={"Получить данные контрагента (Get counteragent by id)"},
      *     summary="",
      *     @SWG\Response(
      *         response="200",
@@ -215,7 +215,7 @@ class CounteragentController extends AbstractController
 
     /**
      * @Operation(
-     *     tags={"Частично обновить данные контрагента (Path counteragent)"},
+     *     tags={"Частично обновить данные контрагента (PATH counteragent)"},
      *     summary="",
      *     @SWG\Parameter(
      *         name="uuid1c",
@@ -338,8 +338,6 @@ class CounteragentController extends AbstractController
         $client = $this->getClient($id);
 
         $requestFields = $request->request->all();
-
-        dump($requestFields);
 
         /** @var InputCounteragent $input */
         $input = $this->requestMap(InputCounteragent::class, $requestFields);

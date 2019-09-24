@@ -24,14 +24,12 @@ class InvoiceController extends AbstractController
      *     @SWG\Parameter(
      *         name="_limit",
      *         in="query",
-     *         description="todo",
      *         required=false,
      *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="_offset",
      *         in="query",
-     *         description="todo",
      *         required=false,
      *         type="string"
      *     ),
@@ -44,31 +42,31 @@ class InvoiceController extends AbstractController
      *     ),
      *     @SWG\Parameter(
      *         name="created",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="amount",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="paid_amount",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="couteragent_id",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="integer")
+     *         type="integer"
      *     ),
      *     @SWG\Response(
      *         response="200",
