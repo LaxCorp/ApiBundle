@@ -6,4 +6,4 @@ services:
 
     LaxCorp\ApiBundle\:
         resource: '../../*'
-        exclude: '../../{DependencyInjection,Model,Tests,Kernel.php,Helper/DoctrineMatcherResult.php}'
+        exclude: '../../{DependencyInjection,Model,Entity,Tests,Kernel.php,Helper/DoctrineMatcherResult.php}'

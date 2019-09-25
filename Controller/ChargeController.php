@@ -2,8 +2,11 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Request\ParamFetcherInterface;
+use LaxCorp\BillingPartnerBundle\Model\Charge;
+use LaxCorp\BillingPartnerBundle\Query\SearchQuery;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
@@ -11,6 +14,16 @@ use Symfony\Component\HttpFoundation\Request;
 use LaxCorp\ApiBundle\Model\InputCharge;
 use BillingApiBundle\Services\Api\Api as BillingApi;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
+use LaxCorp\BillingPartnerBundle\Model\AccountOperation;
+use LaxCorp\ApiBundle\Entity\AccountOperation as LegacyAccountOperation;
 
 /**
  * @Rest\RouteResource("Charge", pluralize=false)
@@ -45,66 +58,66 @@ class ChargeController extends AbstractController
      *     ),
      *     @SWG\Parameter(
      *         name="created",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="closed",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="amount",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="couteragent_id",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="integer")
+     *         type="integer"
      *     ),
      *     @SWG\Parameter(
      *         name="type",
-     *         in="body",
+     *         in="query",
      *         description="SUBSCRIPTION | OVERUSE_CLICKS | REFILL | MONEYBACK | PACKET_ACQUISITION",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="description",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="tariff_name",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="multiplier",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="clicks_count",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -138,20 +151,17 @@ class ChargeController extends AbstractController
     public function cgetAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
 
-        $_limit  = $paramFetcher->get('_limit');
-        $_page = $paramFetcher->get('_page');
-        $_order  = $paramFetcher->get('_order');
+        $_limit = $paramFetcher->get('_limit');
+        $_page  = $paramFetcher->get('_page');
+        $_order = $paramFetcher->get('_order');
 
         $order = $this->orderMap($_order);
-
-        /** @var BillingApi $billing_api */
-        $billing_api = $this->getBillingApi();
 
         /** @var InputCharge $input */
         $input  = $this->requestMap(InputCharge::class, $request->query->all());
         $fields = $this->searchMap($input);
 
-        $result =  $billing_api->searchAccountOperations($fields, $_limit, $_page, $order);
+        $result = $this->searchAccountOperations($fields, $_limit, $_page, $order);
 
         return $result->items;
 
@@ -174,18 +184,81 @@ class ChargeController extends AbstractController
      */
     public function getAction($id)
     {
-        /** @var BillingApi $billing_api */
-        $billing_api = $this->getBillingApi();
 
-        $result =  $billing_api->searchAccountOperations(['id'=>$id], 1, 0, []);
+        $result = $this->accountOperationHelper->findOneById($id);
 
-        if(!$result->items){
+        if (!$result) {
             throw new NotFoundHttpException();
         }
 
-        return $result->items[0];
+        return (array) $this->chargeOut($result);
     }
 
+    private function searchAccountOperations($fields = [], $limit = 10, $page = 0, $order = ['id' => 'DESC'])
+    {
+
+        $return = (object)[
+            'count' => 0,
+            'page'  => $page,
+            'items' => [],
+            'pages' => []
+        ];
+
+        $repository = $this->getDoctrine()->getRepository('ApiBundle:AccountOperation');
+
+        $data = [
+            'search' => $this->accountOperationHelper->createSearch($repository, $fields),
+            'size'   => $limit,
+            'page'   => $page,
+        ];
+
+        $searchQuery = new SearchQuery();
+        $searchQuery->setSearch($this->accountOperationHelper->createSearch($repository, $fields));
+        $searchQuery->setSize($limit);
+        $searchQuery->setPage((int)$page);
+
+        $return->count = $this->accountOperationHelper->getCount($searchQuery);
+
+        if (!$return->count) {
+            return $return;
+        }
+
+        $pages = $return->count / $limit;
+
+        if ($pages > 1) {
+            $pages_count = ceil($pages);
+            for ($i = 0; $i < $pages_count; $i++) {
+                $return->pages[] = $i + 1;
+            }
+        }
+
+        $searchQuery->setSort($this->accountOperationHelper->createSort($order));
+
+        $result = $this->accountOperationHelper->find($searchQuery);
+
+        foreach ($result as $accountOperations) {
+            $return->items[] = (array) $this->chargeOut($accountOperations);
+        }
+
+        return $return;
+    }
+
+    private function chargeOut(AccountOperation $charge)
+    {
+        $o                 = (object)[];
+        $o->id             = $charge->getId();
+        $o->created        = $charge->getCreated();
+        $o->closed         = $charge->getClosed();
+        $o->amount         = $charge->getAmount();
+        $o->couteragent_id = $charge->getAccount()->getId();
+        $o->type           = $charge->getReason();
+        $o->tariff_name    = $charge->getTariffName();
+        $o->clicks_count   = $charge->getClicksCount();
+        $o->multiplier     = $charge->getMultiplier();
+        $o->description    = $charge->getDescription();
+
+        return $o;
+    }
 
     /**
      * @param InputCharge $input
@@ -229,14 +302,12 @@ class ChargeController extends AbstractController
             $fields['multiplier'] = $input->getMultiplier();
         }
 
-
         if ($input->getClicksCount() !== null) {
             $fields['clicksCount'] = $input->getClicksCount();
         }
 
         return $fields;
     }
-
 
     /**
      * @param $_order
@@ -280,14 +351,6 @@ class ChargeController extends AbstractController
         }
 
         return $order;
-    }
-
-    /**
-     * @return object Api
-     */
-    private function getBillingApi()
-    {
-        return $this->get('billing_api.api');
     }
 
 }

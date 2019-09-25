@@ -9,10 +9,13 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\Exclusion\GroupsExclusionStrategy;
 use JMS\Serializer\SerializationContext;
+use LaxCorp\BillingPartnerBundle\Helper\MappingHelper;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use JMS\Serializer\SerializerInterface;
 use LaxCorp\BillingPartnerBundle\Helper\VersionHelper as BillingVersionHelper;
+use LaxCorp\BillingPartnerBundle\Helper\AccountOperationHelper;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\EventListener\CounteragentUpdateSubscriber;
@@ -24,6 +27,8 @@ use App\EventListener\CounteragentUpdateSubscriber;
  */
 abstract class AbstractController extends AbstractFOSRestController
 {
+
+    public $logger;
 
     /**
      * @var DoctrineMatcher
@@ -55,21 +60,29 @@ abstract class AbstractController extends AbstractFOSRestController
      */
     public $counteragentUpdateSubscriber;
 
+    /**
+     * @var AccountOperationHelper
+     */
+    public $accountOperationHelper;
 
     public function __construct(
+        LoggerInterface $logger,
         DoctrineMatcher $doctrineMatcher,
         SerializerInterface $jmsSerializer,
         KernelInterface $kernel,
         BillingVersionHelper $billingVersionHelper,
         ValidatorInterface $validator,
-        CounteragentUpdateSubscriber $counteragentUpdateSubscriber
+        CounteragentUpdateSubscriber $counteragentUpdateSubscriber,
+        AccountOperationHelper $accountOperationHelper
     ) {
+        $this->logger                       = $logger;
         $this->doctrineMatcher              = $doctrineMatcher;
         $this->jmsSerializer                = $jmsSerializer;
         $this->kernel                       = $kernel;
         $this->billingVersionHelper         = $billingVersionHelper;
         $this->validator                    = $validator;
         $this->counteragentUpdateSubscriber = $counteragentUpdateSubscriber;
+        $this->accountOperationHelper       = $accountOperationHelper;
     }
 
     /**
