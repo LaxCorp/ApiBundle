@@ -49,52 +49,52 @@ class EventsController extends AbstractController
      *     ),
      *     @SWG\Parameter(
      *         name="id",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="created",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="updated",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="processing",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Parameter(
      *         name="completed",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Parameter(
      *         name="resource_name",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="resource_id",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -185,17 +185,17 @@ class EventsController extends AbstractController
      *     summary="",
      *     @SWG\Parameter(
      *         name="processing",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Parameter(
      *         name="completed",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Response(
      *         response="200",

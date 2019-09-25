@@ -50,38 +50,38 @@ class CustomerRequestController extends AbstractController
      *     ),
      *     @SWG\Parameter(
      *         name="created_at",
-     *         in="body",
+     *         in="query",
      *         description="ISO 8601 - 2017-10-20T11:27:25+07:00 or range (>=2017-09-26T18:28:07+07:00,<=2017-10-20T11:27:25+07:00)",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="customer_login",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="name",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="description",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="job_email",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -133,41 +133,6 @@ class CustomerRequestController extends AbstractController
      * @Operation(
      *     tags={"Сообщить об ошибке (сообщение с рабочих мест)"},
      *     summary="",
-     *     @SWG\Parameter(
-     *         name="created_at",
-     *         in="body",
-     *         description="ISO 8601 - 2017-10-20T11:27:25+07:00 or range (>=2017-09-26T18:28:07+07:00,<=2017-10-20T11:27:25+07:00)",
-     *         required=false,
-     *         @SWG\Schema(type="string")
-     *     ),
-     *     @SWG\Parameter(
-     *         name="customer_login",
-     *         in="body",
-     *         description="",
-     *         required=false,
-     *         @SWG\Schema(type="string")
-     *     ),
-     *     @SWG\Parameter(
-     *         name="name",
-     *         in="body",
-     *         description="",
-     *         required=false,
-     *         @SWG\Schema(type="string")
-     *     ),
-     *     @SWG\Parameter(
-     *         name="description",
-     *         in="body",
-     *         description="",
-     *         required=false,
-     *         @SWG\Schema(type="string")
-     *     ),
-     *     @SWG\Parameter(
-     *         name="job_email",
-     *         in="body",
-     *         description="",
-     *         required=false,
-     *         @SWG\Schema(type="string")
-     *     ),
      *     @SWG\Response(
      *         response="200",
      *         description="Returned when successful",
@@ -327,9 +292,7 @@ class CustomerRequestController extends AbstractController
                 return $this->errorView($conflicts, $invalid);
             }
 
-            $customerHelper = $this->get('billing_partner.helper.customer_helper');
-
-            $customer = $customerHelper->getCustomerByLogin($customerRequest->getCustomerLogin());
+            $customer = $this->customerHelper->getCustomerByLogin($customerRequest->getCustomerLogin());
 
             if (!$customer) {
                 $invalid[] = [
@@ -346,10 +309,9 @@ class CustomerRequestController extends AbstractController
             $customerState = $customer->getState();
             $customerEmail = $customer->getEmail();
 
-            $clientHelper = $this->get('app.client_helper');
-            $client       = $clientHelper->getClientByAccountId($accountId);
+            $client = $this->clientHelper->getClientByAccountId($accountId);
 
-            $userName  = '-нет личного кабинета-';
+            $userName = '-нет личного кабинета-';
 
             $jobEmail = $customerRequest->getJobEmail();
 
@@ -382,26 +344,22 @@ class CustomerRequestController extends AbstractController
                 return $this->errorView($conflicts, $invalid);
             }
 
-            $translator = $this->get('translator');
+            $description = "*{$this->translator->trans('Full name')}:* {$userName}\n";
+            $description .= "*{$this->translator->trans('Email')}:* {$userEmail}\n";
 
-            $description = "*{$translator->trans('Full name')}:* {$userName}\n";
-            $description .= "*{$translator->trans('Email')}:* {$userEmail}\n";
-
-            if($jobEmail && $jobEmail!==$userEmail){
-                $description .= "*{$translator->trans('label.job_email')}:* {$jobEmail}\n";
+            if ($jobEmail && $jobEmail !== $userEmail) {
+                $description .= "*{$this->translator->trans('label.job_email')}:* {$jobEmail}\n";
             }
 
             $description .= "*Рабочее место:*\n";
 
-            $description .= "_{$translator->trans('Login')}_: {$customerLogin} ";
-            $description .= "_{$translator->trans('State')}_: {$customerState}\n";
+            $description .= "_{$this->translator->trans('Login')}_: {$customerLogin} ";
+            $description .= "_{$this->translator->trans('State')}_: {$customerState}\n";
 
             $description .= "\n{$customerRequest->getDescription()}";
 
-            $jiraApi = $this->get('app.jira_api');
-
-            $issue  = $jiraApi->createIssue($customerRequest->getName(), $description, $component->getJiraComponentId());
-            $status = $jiraApi->getDefaultStatus();
+            $issue  = $this->jiraApi->createIssue($customerRequest->getName(), $description, $component->getJiraComponentId());
+            $status = $this->jiraApi->getDefaultStatus();
 
             if (!$issue || !$status) {
 
@@ -427,12 +385,12 @@ class CustomerRequestController extends AbstractController
 
                 $uploadDir  = $this->getParameter('app_request_files_upload_dir');
                 $filePath   = realpath($uploadDir . $fileInfo['fileName']);
-                $attachment = $jiraApi->createIssueAttachment($issue['id'], $fileInfo['fileName'], $filePath);
+                $attachment = $this->jiraApi->createIssueAttachment($issue['id'], $fileInfo['fileName'], $filePath);
 
                 if ($attachment) {
 
-                    $description .= "\n\n" . $jiraApi->getAttachedFileString($attachment['filename']);
-                    $jiraApi->updateIssue($issue['id'], $description);
+                    $description .= "\n\n" . $this->jiraApi->getAttachedFileString($attachment['filename']);
+                    $this->jiraApi->updateIssue($issue['id'], $description);
                 }
 
             }

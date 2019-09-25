@@ -49,38 +49,38 @@ class ReconciliationRequestController extends AbstractController
      *     ),
      *     @SWG\Parameter(
      *         name="couteragent_id",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="integer")
+     *         type="integer"
      *     ),
      *     @SWG\Parameter(
      *         name="date_from",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="date_to",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="completed",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Parameter(
      *         name="created",
-     *         in="body",
+     *         in="query",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -172,38 +172,38 @@ class ReconciliationRequestController extends AbstractController
      *     summary="",
      *     @SWG\Parameter(
      *         name="couteragent_id",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="integer")
+     *         type="integer"
      *     ),
      *     @SWG\Parameter(
      *         name="date_from",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="date_to",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Parameter(
      *         name="completed",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="boolean")
+     *         type="boolean"
      *     ),
      *     @SWG\Parameter(
      *         name="created",
-     *         in="body",
+     *         in="formData",
      *         description="",
      *         required=false,
-     *         @SWG\Schema(type="string")
+     *         type="string"
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -425,7 +425,6 @@ class ReconciliationRequestController extends AbstractController
 
         return $order;
     }
-
 
     /**
      * @param $value

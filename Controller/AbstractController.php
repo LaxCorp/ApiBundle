@@ -9,8 +9,10 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\Exclusion\GroupsExclusionStrategy;
 use JMS\Serializer\SerializationContext;
+use LaxCorp\BillingPartnerBundle\Helper\CustomerHelper;
 use LaxCorp\BillingPartnerBundle\Helper\MappingHelper;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +21,11 @@ use JMS\Serializer\SerializerInterface;
 use LaxCorp\BillingPartnerBundle\Helper\VersionHelper as BillingVersionHelper;
 use LaxCorp\BillingPartnerBundle\Helper\AccountOperationHelper;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\EventListener\CounteragentUpdateSubscriber;
+use App\Helper\ClientHelper;
+use App\Services\Jira\JiraApi;
 
 /**
  * Class BaseController
@@ -30,6 +35,14 @@ use App\EventListener\CounteragentUpdateSubscriber;
 abstract class AbstractController extends AbstractFOSRestController
 {
 
+    /**
+     * @var TranslatorInterface
+     */
+    public $translator;
+
+    /**
+     * @var LoggerInterface
+     */
     public $logger;
 
     /**
@@ -77,7 +90,23 @@ abstract class AbstractController extends AbstractFOSRestController
      */
     public $legacyDispatcher;
 
+    /**
+     * @var CustomerHelper
+     */
+    public $customerHelper;
+
+    /**
+     * @var ClientHelper
+     */
+    public $clientHelper;
+
+    /**
+     * @var JiraApi
+     */
+    public $jiraApi;
+
     public function __construct(
+        TranslatorInterface $translator,
         LoggerInterface $logger,
         DoctrineMatcher $doctrineMatcher,
         SerializerInterface $jmsSerializer,
@@ -86,8 +115,12 @@ abstract class AbstractController extends AbstractFOSRestController
         ValidatorInterface $validator,
         CounteragentUpdateSubscriber $counteragentUpdateSubscriber,
         AccountOperationHelper $accountOperationHelper,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        CustomerHelper $customerHelper,
+        ClientHelper $clientHelper,
+        JiraApi $jiraApi
     ) {
+        $this->translator                   = $translator;
         $this->logger                       = $logger;
         $this->doctrineMatcher              = $doctrineMatcher;
         $this->jmsSerializer                = $jmsSerializer;
@@ -98,6 +131,9 @@ abstract class AbstractController extends AbstractFOSRestController
         $this->accountOperationHelper       = $accountOperationHelper;
         $this->dispatcher                   = $eventDispatcher;
         $this->legacyDispatcher             = LegacyEventDispatcherProxy::decorate($eventDispatcher);
+        $this->customerHelper               = $customerHelper;
+        $this->clientHelper                 = $clientHelper;
+        $this->jiraApi                      = $jiraApi;
     }
 
     /**
