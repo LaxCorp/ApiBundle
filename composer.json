@@ -1,6 +1,6 @@
 {
   "name": "laxcorp/api-bundle",
-  "description": "Billing helper",
+  "description": "Private api (for special lax. projects)",
   "type": "symfony-bundle",
   "homepage": "https://github.com/LaxCorp/ApiBundle",
   "license": "MIT",
