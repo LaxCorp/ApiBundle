@@ -11,6 +11,8 @@ use JMS\Serializer\Exclusion\GroupsExclusionStrategy;
 use JMS\Serializer\SerializationContext;
 use LaxCorp\BillingPartnerBundle\Helper\MappingHelper;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use JMS\Serializer\SerializerInterface;
@@ -65,6 +67,16 @@ abstract class AbstractController extends AbstractFOSRestController
      */
     public $accountOperationHelper;
 
+    /**
+     * @var EventDispatcherInterface
+     */
+    public $dispatcher;
+
+    /**
+     * @var LegacyEventDispatcherProxy
+     */
+    public $legacyDispatcher;
+
     public function __construct(
         LoggerInterface $logger,
         DoctrineMatcher $doctrineMatcher,
@@ -73,7 +85,8 @@ abstract class AbstractController extends AbstractFOSRestController
         BillingVersionHelper $billingVersionHelper,
         ValidatorInterface $validator,
         CounteragentUpdateSubscriber $counteragentUpdateSubscriber,
-        AccountOperationHelper $accountOperationHelper
+        AccountOperationHelper $accountOperationHelper,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->logger                       = $logger;
         $this->doctrineMatcher              = $doctrineMatcher;
@@ -83,6 +96,8 @@ abstract class AbstractController extends AbstractFOSRestController
         $this->validator                    = $validator;
         $this->counteragentUpdateSubscriber = $counteragentUpdateSubscriber;
         $this->accountOperationHelper       = $accountOperationHelper;
+        $this->dispatcher                   = $eventDispatcher;
+        $this->legacyDispatcher             = LegacyEventDispatcherProxy::decorate($eventDispatcher);
     }
 
     /**

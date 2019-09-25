@@ -505,7 +505,7 @@ class DocumentController extends AbstractController
         $eventName = $this::NEW_DOCUMENT_EVENT_NAME;
         $event     = new GenericEvent($documents);
 
-        $this->get('event_dispatcher')->dispatch($eventName, $event);
+        $this->legacyDispatcher->dispatch($event, $eventName);
 
     }
 

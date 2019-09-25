@@ -18,7 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Rest\RouteResource("CustomerRequest", pluralize=false)
- * @Security("has_role('ROLE_API_SUPPORT') or has_role('ROLE_SUPER_ADMIN')")
+ * @Security("is_granted('ROLE_API_SUPPORT') or is_granted('ROLE_SUPER_ADMIN')")
  */
 class CustomerRequestController extends AbstractController
 {
