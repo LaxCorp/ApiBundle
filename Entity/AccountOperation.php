@@ -8,8 +8,8 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * AccountOperation
  *
- * @ORM\Table(name="accountoperation")
- * @ORM\Entity
+ * @ORM\Table(name="t_accountoperation")
+ * @ORM\Entity()
  *
  * @Serializer\ExclusionPolicy("all")
  * @Serializer\AccessorOrder("custom", custom = {
