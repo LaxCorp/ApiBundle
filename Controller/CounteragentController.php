@@ -3,6 +3,8 @@
 namespace LaxCorp\ApiBundle\Controller;
 
 use App\Entity\Client;
+use App\Entity\RemoteAccount;
+use LaxCorp\ApiBundle\Helper\DoctrineMatcherResult;
 use LaxCorp\ApiBundle\Model\InputCounteragent;
 use App\Entity\Company;
 use App\Entity\User;
@@ -13,6 +15,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\ConstraintViolation;
 
@@ -175,8 +178,40 @@ class CounteragentController extends AbstractController
 
         $matcherResult = $this->getMatcher()->matching($repository, $fields, $_order, $_offset, $_limit);
 
-        return $this->createViewByMatcher($matcherResult, 200);
+        return $this->createClientsViewByMatcher($matcherResult, 200);
     }
+
+    /**
+     * @param DoctrineMatcherResult $matcherResult
+     * @param null                  $statusCode
+     * @param array                 $headers
+     *
+     * @return Request
+     */
+    private function createClientsViewByMatcher(
+        DoctrineMatcherResult $matcherResult,
+        $statusCode = null,
+        array $headers = []
+    ): Response {
+        $offset = $matcherResult->getFirstResult();
+        $limit  = $matcherResult->getMaxResults();
+
+        /** @var Client[] $clients */
+        $clients = $matcherResult->getList();
+
+        foreach ($clients as $client) {
+            $remoteAccounts = $client->getRemoteAccounts();
+            foreach ($remoteAccounts as $remoteAccount) {
+                $this->prepareRemoteAccount($remoteAccount);
+            }
+        }
+
+        $view = $this->view($clients, $statusCode, $headers);
+        $this->setContentRangeHeader($view, $offset, $limit, $matcherResult->getTotal());
+
+        return $this->handleView($view);
+    }
+
 
     /**
      * @Operation(
@@ -195,7 +230,12 @@ class CounteragentController extends AbstractController
      */
     public function getAction($id)
     {
-        return $this->getClient($id);
+        $client = $this->getClient($id);
+        $remoteAccounts = $client->getRemoteAccounts();
+        foreach ($remoteAccounts as $remoteAccount) {
+            $this->prepareRemoteAccount($remoteAccount);
+        }
+        return $client;
     }
 
     /**
@@ -205,7 +245,7 @@ class CounteragentController extends AbstractController
      */
     private function getClient($id)
     {
-        $client = $this->getRepository(Client::class)->findOneBy(['accountId' => (integer)$id]);
+        $client = $this->getRepository(Client::class)->findOneBy(['counteragentId' => (integer)$id]);
         if (!$client) {
             throw $this->createNotFoundException('client not found');
         }
@@ -331,7 +371,6 @@ class CounteragentController extends AbstractController
      */
     public function patchAction($id, Request $request)
     {
-
         $conflicts = [];
         $invalid   = [];
 
@@ -347,7 +386,6 @@ class CounteragentController extends AbstractController
         $violations = $this->validator->validate($clientUpdated);
 
         if ($violations->count() != 0) {
-
             $accessor = PropertyAccess::createPropertyAccessor();
 
             /** @var ConstraintViolation $violation */
@@ -359,7 +397,6 @@ class CounteragentController extends AbstractController
                 $root       = $violation->getRoot();
 
                 if ($constraint instanceof UniqueEntity) {
-
                     $param         = [];
                     $relatedFields = explode('.', $key);
                     $key           = $relatedFields[0];
@@ -411,8 +448,12 @@ class CounteragentController extends AbstractController
         $em->persist($clientUpdated);
         $em->flush();
 
-        return $clientUpdated;
+        $remoteAccounts = $clientUpdated->getRemoteAccounts();
+        foreach ($remoteAccounts as $remoteAccount) {
+            $this->prepareRemoteAccount($remoteAccount);
+        }
 
+        return $clientUpdated;
     }
 
     /**
@@ -430,7 +471,6 @@ class CounteragentController extends AbstractController
      */
     private function patchClass(Client $client, InputCounteragent $input, array $requestFields)
     {
-
         $company = $client->getCompany();
 
         if (!$company) {

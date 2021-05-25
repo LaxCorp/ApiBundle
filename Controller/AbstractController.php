@@ -2,6 +2,7 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
+use App\Entity\RemoteAccount;
 use LaxCorp\ApiBundle\Helper\DoctrineMatcherResult;
 use LaxCorp\ApiBundle\Services\DoctrineMatcher;
 use Doctrine\ORM\EntityRepository;
@@ -291,5 +292,16 @@ abstract class AbstractController extends AbstractFOSRestController
         }
 
         return $this->handleView($view);
+    }
+
+    /**
+     * @param RemoteAccount $remoteAccount
+     */
+    protected function prepareRemoteAccount(RemoteAccount $remoteAccount): void{
+        $profiles = $remoteAccount->getProfiles();
+        foreach ($profiles as $profile){
+            $customerId = $profile->getCustomerId();
+            $profile->setCustomer($this->customerHelper->getCustomer($customerId));
+        }
     }
 }

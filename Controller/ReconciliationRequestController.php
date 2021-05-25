@@ -335,7 +335,7 @@ class ReconciliationRequestController extends AbstractController
      */
     private function getClient($id)
     {
-        $client = $this->getRepository(Client::class)->findOneBy(['accountId' => (integer)$id]);
+        $client = $this->getRepository(Client::class)->findOneBy(['counteragentId' => (integer)$id]);
         if (!$client) {
             throw $this->createNotFoundException('client not found');
         }
@@ -363,7 +363,7 @@ class ReconciliationRequestController extends AbstractController
         $fields = [];
 
         if ($input->getCouteragentId() !== null) {
-            $fields['client']['accountId'] = $input->getCouteragentId();
+            $fields['client']['counteragentId'] = $input->getCouteragentId();
         }
 
         if ($input->getDateFrom() !== null) {

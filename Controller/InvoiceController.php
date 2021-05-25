@@ -164,7 +164,7 @@ class InvoiceController extends AbstractController
         }
 
         if ($input->getCouteragentId() !== null) {
-            $fields['client']['accountId'] = $input->getCouteragentId();
+            $fields['client']['counteragentId'] = $input->getCouteragentId();
         }
 
         return $fields;

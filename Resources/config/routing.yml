@@ -1,58 +1,62 @@
 test:
     type: rest
     resource: "@ApiBundle/Controller/TestController.php"
-    prefix: /v1
+    prefix: /v2
 
 counteragent:
     type: rest
     resource: "@ApiBundle/Controller/CounteragentController.php"
-    prefix: /v1
+    prefix: /v2
 
 invoice:
     type: rest
     resource: "@ApiBundle/Controller/InvoiceController.php"
-    prefix: /v1
+    prefix: /v2
 
 payment:
     type: rest
     resource: "@ApiBundle/Controller/PaymentController.php"
-    prefix: /v1
+    prefix: /v2
 
 charge:
     type: rest
     resource: "@ApiBundle/Controller/ChargeController.php"
-    prefix: /v1
+    prefix: /v2
 
 document:
     type: rest
     resource: "@ApiBundle/Controller/DocumentController.php"
-    prefix: /v1
+    prefix: /v2
 
 reconciliation_request:
     type: rest
     resource: "@ApiBundle/Controller/ReconciliationRequestController.php"
-    prefix: /v1
+    prefix: /v2
 
 counteragent_datarequest:
     type: rest
     resource: "@ApiBundle/Controller/CounteragentDataRequestController.php"
-    prefix: /v1
+    prefix: /v2
 
 events:
     type: rest
     resource: "@ApiBundle/Controller/EventsController.php"
-    prefix: /v1
+    prefix: /v2
 
 customer_request:
     type: rest
     resource: "@ApiBundle/Controller/CustomerRequestController.php"
-    prefix: /v1
+    prefix: /v2
 
 login_status:
     type: rest
     resource: "@ApiBundle/Controller/LoginStatusController.php"
-    prefix: /v1
+    prefix: /v2
 
+account:
+    type: rest
+    resource: "@ApiBundle/Controller/AccountController.php"
+    prefix: /v2
 #sonata_api_media:
 #    type:         rest
 #    prefix:       /v1

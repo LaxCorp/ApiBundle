@@ -373,7 +373,7 @@ class CounteragentDataRequestController extends AbstractController
         $fields = [];
 
         if ($input->getCounteragentId() !== null) {
-            $fields['client']['accountId'] = $input->getCounteragentId();
+            $fields['client']['counteragentId'] = $input->getCounteragentId();
         }
 
         if ($input->getCreatedAt() !== null) {

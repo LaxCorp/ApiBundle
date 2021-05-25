@@ -254,17 +254,16 @@ class DocumentController extends AbstractController
      */
     private function setFileUrl(Documents $documents)
     {
-
         $file = $documents->getFile();
         if (!$file) {
             return $file;
         }
 
         $parameters = [
-            'accountId'  => $documents->getClient()->getAccountId(),
-            'documentId' => $documents->getId(),
-            'name'       => 'file',
-            'ext'        => 'pdf'
+            'counteragentId' => $documents->getClient()->getCounteragentId(),
+            'documentId'     => $documents->getId(),
+            'name'           => 'file',
+            'ext'            => 'pdf'
         ];
 
         $url = $this->generateUrl('api_download_documents', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
@@ -288,7 +287,6 @@ class DocumentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-
             if (!$documents->getCounteragentId()) {
                 $invalid[] = [
                     'field'   => 'couteragent_id',
@@ -391,7 +389,6 @@ class DocumentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-
             if ($documents->getUuid1c() !== null) {
                 $oldDocument->setUuid1c($documents->getUuid1c());
             }
@@ -479,7 +476,7 @@ class DocumentController extends AbstractController
      */
     private function getClient($id)
     {
-        $client = $this->getRepository(Client::class)->findOneBy(['accountId' => (integer)$id]);
+        $client = $this->getRepository(Client::class)->findOneBy(['counteragentId' => (integer)$id]);
         if (!$client) {
             throw $this->createNotFoundException('client not found');
         }
@@ -506,7 +503,6 @@ class DocumentController extends AbstractController
         $event     = new GenericEvent($documents);
 
         $this->legacyDispatcher->dispatch($event, $eventName);
-
     }
 
 }

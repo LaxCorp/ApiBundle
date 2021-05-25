@@ -78,7 +78,7 @@ class ChargeController extends AbstractController
      *         type="string"
      *     ),
      *     @SWG\Parameter(
-     *         name="couteragent_id",
+     *         name="account_id",
      *         in="query",
      *         description="",
      *         required=false,
@@ -150,7 +150,6 @@ class ChargeController extends AbstractController
      */
     public function cgetAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
-
         $_limit = $paramFetcher->get('_limit');
         $_page  = $paramFetcher->get('_page');
         $_order = $paramFetcher->get('_order');
@@ -164,7 +163,6 @@ class ChargeController extends AbstractController
         $result = $this->searchAccountOperations($fields, $_limit, $_page, $order);
 
         return $result->items;
-
     }
 
     /**
@@ -184,19 +182,17 @@ class ChargeController extends AbstractController
      */
     public function getAction($id)
     {
-
         $result = $this->accountOperationHelper->findOneById($id);
 
         if (!$result) {
             throw new NotFoundHttpException();
         }
 
-        return (array) $this->chargeOut($result);
+        return (array)$this->chargeOut($result);
     }
 
     private function searchAccountOperations($fields = [], $limit = 10, $page = 0, $order = ['id' => 'DESC'])
     {
-
         $return = (object)[
             'count' => 0,
             'page'  => $page,
@@ -237,7 +233,7 @@ class ChargeController extends AbstractController
         $result = $this->accountOperationHelper->find($searchQuery);
 
         foreach ($result as $accountOperations) {
-            $return->items[] = (array) $this->chargeOut($accountOperations);
+            $return->items[] = (array)$this->chargeOut($accountOperations);
         }
 
         return $return;
@@ -245,17 +241,17 @@ class ChargeController extends AbstractController
 
     private function chargeOut(AccountOperation $charge)
     {
-        $o                 = (object)[];
-        $o->id             = $charge->getId();
-        $o->created        = $charge->getCreated();
-        $o->closed         = $charge->getClosed();
-        $o->amount         = $charge->getAmount();
-        $o->couteragent_id = $charge->getAccount()->getId();
-        $o->type           = $charge->getReason();
-        $o->tariff_name    = $charge->getTariffName();
-        $o->clicks_count   = $charge->getClicksCount();
-        $o->multiplier     = $charge->getMultiplier();
-        $o->description    = $charge->getDescription();
+        $o               = (object)[];
+        $o->id           = $charge->getId();
+        $o->created      = $charge->getCreated();
+        $o->closed       = $charge->getClosed();
+        $o->amount       = $charge->getAmount();
+        $o->account_id   = $charge->getAccount()->getId();
+        $o->type         = $charge->getReason();
+        $o->tariff_name  = $charge->getTariffName();
+        $o->clicks_count = $charge->getClicksCount();
+        $o->multiplier   = $charge->getMultiplier();
+        $o->description  = $charge->getDescription();
 
         return $o;
     }
@@ -334,8 +330,8 @@ class ChargeController extends AbstractController
             $order['amount'] = $_order['amount'];
         }
 
-        if (isset($_order['couteragent_id'])) {
-            $order['account.id'] = $_order['couteragent_id'];
+        if (isset($_order['account_id'])) {
+            $order['account.id'] = $_order['account_id'];
         }
 
         if (isset($_order['tariff_name'])) {

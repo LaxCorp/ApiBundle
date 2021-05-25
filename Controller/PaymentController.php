@@ -541,7 +541,7 @@ class PaymentController extends AbstractController
      */
     private function getClient($id)
     {
-        $client = $this->getRepository(Client::class)->findOneBy(['accountId' => (integer)$id]);
+        $client = $this->getRepository(Client::class)->findOneBy(['counteragentId' => (integer)$id]);
         if (!$client) {
             throw $this->createNotFoundException('client not found');
         }
@@ -644,7 +644,7 @@ class PaymentController extends AbstractController
         }
 
         if ($input->getCouteragentId() !== null) {
-            $fields['client']['accountId'] = $input->getCouteragentId();
+            $fields['client']['counteragentId'] = $input->getCouteragentId();
         }
 
         if ($input->getPaymentType() !== null) {
@@ -707,7 +707,7 @@ class PaymentController extends AbstractController
     {
 
         $invalid[] = [
-            'field'   => 'countyeragent_id',
+            'field'   => 'counteragent_id',
             'value'   => $accountId,
             'message' => 'Billing account not found'
         ];
