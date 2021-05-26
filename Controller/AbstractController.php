@@ -161,7 +161,6 @@ abstract class AbstractController extends AbstractFOSRestController
      */
     protected function setContentRangeHeader(View $view, $offset, $limit, $total)
     {
-
         $offset = (int)$offset;
         $limit  = (int)$limit;
         $total  = (int)$total;
@@ -218,7 +217,9 @@ abstract class AbstractController extends AbstractFOSRestController
      * @return Response
      */
     protected function createViewByMatcher(
-        DoctrineMatcherResult $matcherResult, $statusCode = null, array $headers = []
+        DoctrineMatcherResult $matcherResult,
+        $statusCode = null,
+        array $headers = []
     ) {
         $offset = $matcherResult->getFirstResult();
         $limit  = $matcherResult->getMaxResults();
@@ -273,22 +274,28 @@ abstract class AbstractController extends AbstractFOSRestController
     {
         if ($conflicts) {
             $code = Response::HTTP_CONFLICT;
-            $view = $this->view([
-                'error' => [
-                    'code'    => $code,
-                    'message' => 'Conflict',
-                    'fields'  => $conflicts
-                ]
-            ], $code);
+            $view = $this->view(
+                [
+                    'error' => [
+                        'code'    => $code,
+                        'message' => 'Conflict',
+                        'fields'  => $conflicts
+                    ]
+                ],
+                $code
+            );
         } else {
             $code = Response::HTTP_BAD_REQUEST;
-            $view = $this->view([
-                'error' => [
-                    'code'    => $code,
-                    'message' => 'Bad Request',
-                    'fields'  => $invalid
-                ]
-            ], $code);
+            $view = $this->view(
+                [
+                    'error' => [
+                        'code'    => $code,
+                        'message' => 'Bad Request',
+                        'fields'  => $invalid
+                    ]
+                ],
+                $code
+            );
         }
 
         return $this->handleView($view);
@@ -297,11 +304,13 @@ abstract class AbstractController extends AbstractFOSRestController
     /**
      * @param RemoteAccount $remoteAccount
      */
-    protected function prepareRemoteAccount(RemoteAccount $remoteAccount): void{
+    protected function prepareRemoteAccount(RemoteAccount $remoteAccount): void
+    {
         $profiles = $remoteAccount->getProfiles();
-        foreach ($profiles as $profile){
+        foreach ($profiles as $profile) {
             $customerId = $profile->getCustomerId();
             $profile->setCustomer($this->customerHelper->getCustomer($customerId));
         }
     }
+
 }

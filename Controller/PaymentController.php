@@ -2,6 +2,7 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
+use App\Entity\BatchPayment;
 use LaxCorp\ApiBundle\Model\InputPatchPayment;
 use App\Entity\Client;
 use App\Entity\Invoice;
@@ -305,6 +306,7 @@ class PaymentController extends AbstractController
         $input = $this->requestMap(InputPayment::class, $request->request->all());
 
         $paymentUpdated = $this->postClass($payment, $input);
+        $paymentUpdated->setBatchPayment(new BatchPayment());
 
         if ($this->invoiceNotBelongsClient($paymentUpdated)) {
             $invalid[] = [

@@ -183,8 +183,7 @@ class ChargeController extends AbstractController
     public function getAction($id)
     {
         $result = $this->accountOperationHelper->findOneById($id);
-
-        if (!$result) {
+        if (!$result || !$result->getId()) {
             throw new NotFoundHttpException();
         }
 
