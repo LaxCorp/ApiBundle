@@ -3,13 +3,11 @@
 namespace LaxCorp\ApiBundle\Controller;
 
 use App\Entity\Client;
-use App\Entity\Profiles;
 use App\Entity\RemoteAccount;
 use LaxCorp\ApiBundle\Helper\DoctrineMatcherResult;
 use LaxCorp\ApiBundle\Model\InputAccount;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use LaxCorp\BillingPartnerBundle\Helper\CustomerHelper;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use Swagger\Annotations as SWG;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;

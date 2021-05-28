@@ -2,6 +2,7 @@
 
 namespace LaxCorp\ApiBundle\Model;
 
+use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,6 +24,7 @@ class InputPayment
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Serializer\ReadOnly()
+     * @Serializer\Groups({"GetAction", "PatchAction"})
      */
     private $id;
 
@@ -44,6 +46,7 @@ class InputPayment
      * @Serializer\SerializedName("created")
      * @Serializer\Type("string")
      * @Serializer\Expose()
+     * @Serializer\Groups({"GetAction"})
      */
     private $createdAt;
 
@@ -52,6 +55,7 @@ class InputPayment
      *
      * @ORM\Column(type="integer")
      * @Serializer\Type("integer")
+     * @Serializer\Groups({"GetAction", "PostAction", "PatchAction"})
      * @Serializer\Expose()
      */
     private $invoiceId;
@@ -61,51 +65,43 @@ class InputPayment
      *
      * @ORM\Column(type="decimal", precision=19, scale=2, nullable=true)
      *
-     * @Serializer\Type("string")
+     * @Serializer\Type("double")
+     * @Serializer\Groups({"GetAction", "PostAction"})
      * @Serializer\Expose()
      */
     private $amount;
-
 
     /**
      * @var number
      *
      * @ORM\Column(type="decimal", precision=19, scale=2, nullable=true)
      *
-     * @Serializer\Type("string")
+     * @Serializer\Type("double")
+     * @Serializer\Groups({"GetAction", "PostAction"})
      * @Serializer\Expose()
      */
     private $comission;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     * @Serializer\Type("integer")
-     * @Serializer\Expose()
-     */
-    private $couteragentId;
-
-    /**
-     * BANK | ONLINE
-     *
      * @var string
      *
      * @ORM\Column(type="string", type="string", length=255, nullable=true)
      *
      * @Serializer\Type("string")
+     * @Serializer\Groups({"GetAction", "PostAction"})
+     * @SWG\Property(example="BANK", description="BANK | ONLINE")
      * @Serializer\Expose()
      */
     private $paymentType;
 
     /**
-     * REFILL | MONEYBACK
-     *
      * @var string
      *
      * @ORM\Column(type="string", type="string", length=255, nullable=true)
      *
      * @Serializer\Type("string")
+     * @Serializer\Groups({"GetAction", "PostAction"})
+     * @SWG\Property(example="REFILL", description="REFILL | MONEYBACK")
      * @Serializer\Expose()
      */
     private $type;
@@ -116,9 +112,32 @@ class InputPayment
      * @ORM\Column(type="string", type="string", length=255, nullable=true)
      *
      * @Serializer\Type("string")
+     * @Serializer\Groups({"GetAction"})
      * @Serializer\Expose()
      */
     private $description;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"GetAction", "PostAction"})
+     * @Serializer\Expose()
+     * @Assert\NotNull()
+     * @Assert\GreaterThan(value=0)
+     */
+    private $accountId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"GetAction"})
+     * @Serializer\Expose()
+     */
+    private $counteragentId;
 
     /**
      * @return int
@@ -217,22 +236,6 @@ class InputPayment
     }
 
     /**
-     * @return int
-     */
-    public function getCouteragentId()
-    {
-        return $this->couteragentId;
-    }
-
-    /**
-     * @param int $couteragentId
-     */
-    public function setCouteragentId($couteragentId)
-    {
-        $this->couteragentId = $couteragentId;
-    }
-
-    /**
      * @return string
      */
     public function getPaymentType()
@@ -278,6 +281,46 @@ class InputPayment
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
+    }
+
+    /**
+     * @param int $accountId
+     *
+     * @return InputPayment
+     */
+    public function setAccountId(int $accountId)
+    {
+        $this->accountId = $accountId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCounteragentId()
+    {
+        return $this->counteragentId;
+    }
+
+    /**
+     * @param int $counteragentId
+     *
+     * @return InputPayment
+     */
+    public function setCounteragentId(int $counteragentId)
+    {
+        $this->counteragentId = $counteragentId;
+
+        return $this;
     }
 
 }

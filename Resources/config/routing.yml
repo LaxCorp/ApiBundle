@@ -57,6 +57,11 @@ account:
     type: rest
     resource: "@ApiBundle/Controller/AccountController.php"
     prefix: /v2
+
+batch_payment:
+    type: rest
+    resource: "@ApiBundle/Controller/BatchPaymentController.php"
+    prefix: /v2
 #sonata_api_media:
 #    type:         rest
 #    prefix:       /v1

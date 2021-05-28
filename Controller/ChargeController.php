@@ -2,28 +2,16 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use FOS\RestBundle\Controller\Annotations as REST;
+use Doctrine\ORM\EntityRepository;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use LaxCorp\BillingPartnerBundle\Model\Charge;
 use LaxCorp\BillingPartnerBundle\Query\SearchQuery;
 use Nelmio\ApiDocBundle\Annotation\Operation;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use LaxCorp\ApiBundle\Model\InputCharge;
-use BillingApiBundle\Services\Api\Api as BillingApi;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 use LaxCorp\BillingPartnerBundle\Model\AccountOperation;
-use LaxCorp\ApiBundle\Entity\AccountOperation as LegacyAccountOperation;
 
 /**
  * @Rest\RouteResource("Charge", pluralize=false)
@@ -190,6 +178,14 @@ class ChargeController extends AbstractController
         return (array)$this->chargeOut($result);
     }
 
+    /**
+     * @param array    $fields
+     * @param int      $limit
+     * @param int      $page
+     * @param string[] $order
+     *
+     * @return object
+     */
     private function searchAccountOperations($fields = [], $limit = 10, $page = 0, $order = ['id' => 'DESC'])
     {
         $return = (object)[
@@ -199,13 +195,8 @@ class ChargeController extends AbstractController
             'pages' => []
         ];
 
+        /** @var EntityRepository $repository */
         $repository = $this->getDoctrine()->getRepository('ApiBundle:AccountOperation');
-
-        $data = [
-            'search' => $this->accountOperationHelper->createSearch($repository, $fields),
-            'size'   => $limit,
-            'page'   => $page,
-        ];
 
         $searchQuery = new SearchQuery();
         $searchQuery->setSearch($this->accountOperationHelper->createSearch($repository, $fields));
@@ -238,6 +229,11 @@ class ChargeController extends AbstractController
         return $return;
     }
 
+    /**
+     * @param AccountOperation $charge
+     *
+     * @return object
+     */
     private function chargeOut(AccountOperation $charge)
     {
         $o               = (object)[];

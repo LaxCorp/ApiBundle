@@ -4,12 +4,14 @@ namespace LaxCorp\ApiBundle\Controller;
 
 use App\Entity\BatchPayment;
 use App\Entity\RemoteAccount;
+use LaxCorp\ApiBundle\Model\InputBatchPayment;
 use App\Entity\Invoice;
 use App\Entity\Payment;
-use LaxCorp\ApiBundle\Model\InputPayment;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
+use LaxCorp\ApiBundle\Model\SearchBatchPayment;
 use Nelmio\ApiDocBundle\Annotation\Operation;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,14 +21,14 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Validator\ConstraintViolation;
 
 /**
- * @Rest\RouteResource("Payment", pluralize=false)
+ * @Rest\RouteResource("BatchPayments", pluralize=false)
  */
-class PaymentController extends AbstractController
+class BatchPaymentController extends AbstractController
 {
 
     /**
      * @Operation(
-     *     tags={"Оплата"},
+     *     tags={"Оплата на несколько account"},
      *     summary="",
      *     @SWG\Parameter(
      *         name="_limit",
@@ -64,49 +66,7 @@ class PaymentController extends AbstractController
      *         type="string"
      *     ),
      *     @SWG\Parameter(
-     *         name="invoice_id",
-     *         in="query",
-     *         description="",
-     *         required=false,
-     *         type="integer"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="amount",
-     *         in="query",
-     *         description="",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="comission",
-     *         in="query",
-     *         description="",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="couteragent_id",
-     *         in="query",
-     *         description="",
-     *         required=false,
-     *         type="integer"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="payment_type",
-     *         in="query",
-     *         description="BANK | ONLINE",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="type",
-     *         in="query",
-     *         description="REFILL | MONEYBACK",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="description",
+     *         name="comment",
      *         in="query",
      *         description="",
      *         required=false,
@@ -139,17 +99,16 @@ class PaymentController extends AbstractController
      */
     public function cgetAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
-
         $_limit  = $paramFetcher->get('_limit');
         $_offset = $paramFetcher->get('_offset');
         $_order  = $paramFetcher->get('_order');
 
         $order = $this->orderMap($_order);
 
-        $repository = $this->getRepository(Payment::class);
+        $repository = $this->getRepository(BatchPayment::class);
 
-        /** @var InputPayment $input */
-        $input  = $this->requestMap(InputPayment::class, $request->query->all());
+        /** @var SearchBatchPayment $input */
+        $input  = $this->requestMap(SearchBatchPayment::class, $request->query->all());
         $fields = $this->searchMap($input);
 
         $matcherResult = $this->getMatcher()->matching($repository, $fields, $order, $_offset, $_limit);
@@ -159,7 +118,7 @@ class PaymentController extends AbstractController
 
     /**
      * @Operation(
-     *     tags={"Оплата"},
+     *     tags={"Оплата на несколько account"},
      *     summary="",
      *     @SWG\Response(
      *         response="200",
@@ -187,7 +146,7 @@ class PaymentController extends AbstractController
      */
     public function getAction($id)
     {
-        $result = $this->findOneBy(['operation' => (integer)$id]);
+        $result = $this->findOneBy(['id' => (integer)$id]);
         if (!$result) {
             throw new NotFoundHttpException();
         }
@@ -197,71 +156,18 @@ class PaymentController extends AbstractController
 
     /**
      * @Operation(
-     *     tags={"Оплата"},
+     *     tags={"Оплата на несколько account"},
      *     summary="",
      *     @SWG\Parameter(
-     *         name="uuid1c",
-     *         in="formData",
-     *         description="",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="created",
-     *         in="formData",
-     *         description="readOnly",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="invoice_id",
-     *         in="formData",
-     *         description="",
-     *         required=false,
-     *         type="integer"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="amount",
-     *         in="formData",
-     *         description="",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="comission",
-     *         in="formData",
-     *         description="",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="account_id",
-     *         in="formData",
-     *         description="",
-     *         required=false,
-     *         type="integer"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="payment_type",
-     *         in="formData",
-     *         description="BANK | ONLINE",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="type",
-     *         in="formData",
-     *         description="REFILL | MONEYBACK",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="description",
-     *         in="formData",
-     *         description="",
-     *         required=false,
-     *         type="string"
-     *     ),
+     *        name="JSON body",
+     *        in="body",
+     *        description="json request object",
+     *        required=true,
+     *        @SWG\Schema(
+     *            type="object",
+     *            ref=@Model(type=InputBatchPayment::class, groups={"PostAction"})
+     *        )
+     *      ),
      *     @SWG\Response(
      *         response="201",
      *         description="Returned when created successful"
@@ -298,40 +204,11 @@ class PaymentController extends AbstractController
         $conflicts = [];
         $invalid   = [];
 
-        $payment = new Payment();
+        /** @var InputBatchPayment $inputBatchPayment */
+        $inputBatchPayment = $this->requestMap(InputBatchPayment::class, $request->request->all());
+        $batchPayment      = $this->postClass(new BatchPayment(), $inputBatchPayment);
 
-        /** @var InputPayment $input */
-        $input = $this->requestMap(InputPayment::class, $request->request->all());
-
-        $paymentUpdated = $this->postClass($payment, $input);
-        $paymentUpdated->setBatchPayment(new BatchPayment());
-
-        if ($this->invoiceNotBelongsClient($paymentUpdated)) {
-            $invalid[] = [
-                'field'   => 'invoice_id',
-                'value'   => $paymentUpdated->getInvoice(),
-                'message' => 'Invoice not belongs this client'
-            ];
-
-            return $this->errorView($conflicts, $invalid);
-        }
-
-        if (!$paymentUpdated->getInvoice() && !$paymentUpdated->getClient()) {
-            $invalid[] = [
-                'field'   => 'invoice_id',
-                'value'   => $paymentUpdated->getInvoice(),
-                'message' => 'Required: invoice_id || couteragent_id'
-            ];
-            $invalid[] = [
-                'field'   => 'couteragent_id',
-                'value'   => $paymentUpdated->getInvoice(),
-                'message' => 'Required: couteragent_id || invoice_id'
-            ];
-
-            return $this->errorView($conflicts, $invalid);
-        }
-
-        $violations = $this->validator->validate($paymentUpdated);
+        $violations = $this->validator->validate($batchPayment);
 
         if ($violations->count() != 0) {
             /** @var ConstraintViolation $violation */
@@ -363,34 +240,27 @@ class PaymentController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         try {
-            $em->persist($paymentUpdated);
+            $em->persist($batchPayment);
             $em->flush();
         } catch (ResourceNotFoundException $e) {
-            return $this->billingNotFound($paymentUpdated->getCouteragentId());
+            return $e;
         }
 
-        $view = $this->view($paymentUpdated, Response::HTTP_CREATED);
+        $view = $this->view($batchPayment, Response::HTTP_CREATED);
 
         return $this->handleView($view);
     }
 
     /**
      * @Operation(
-     *     tags={"Оплата"},
+     *     tags={"Оплата на несколько account"},
      *     summary="",
      *     @SWG\Parameter(
      *         name="uuid1c",
      *         in="formData",
      *         description="",
      *         required=false,
-     *         type="string"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="invoice_id",
-     *         in="formData",
-     *         description="",
-     *         required=false,
-     *         type="integer"
+     *         type="string",
      *     ),
      *     @SWG\Response(
      *         response="200",
@@ -430,28 +300,18 @@ class PaymentController extends AbstractController
         $conflicts = [];
         $invalid   = [];
 
-        $payment = $this->findOneBy(['operation' => (integer)$id]);
+        $batchPayment = $this->findOneBy(['id' => (integer)$id]);
 
-        if (!$payment) {
+        if (!$batchPayment) {
             throw new NotFoundHttpException();
         }
 
         $requestFields = $request->request->all();
 
-        /** @var InputPayment $input */
-        $input = $this->requestMap(InputPayment::class, $requestFields);
+        /** @var InputBatchPayment $input */
+        $input = $this->requestMap(InputBatchPayment::class, $requestFields);
 
-        $paymentUpdated = $this->patchClass($payment, $input, $requestFields);
-
-        if ($this->invoiceNotBelongsClient($paymentUpdated)) {
-            $invalid[] = [
-                'field'   => 'invoice_id',
-                'value'   => $paymentUpdated->getInvoice(),
-                'message' => 'Invoice not belongs this client'
-            ];
-
-            return $this->errorView($conflicts, $invalid);
-        }
+        $paymentUpdated = $this->patchClass($batchPayment, $input, $requestFields);
 
         $violations = $this->validator->validate($paymentUpdated);
 
@@ -489,48 +349,42 @@ class PaymentController extends AbstractController
             $em->persist($paymentUpdated);
             $em->flush();
         } catch (ResourceNotFoundException $e) {
-            return $this->billingNotFound($paymentUpdated->getCouteragentId());
+            return $e;
         }
 
         return $paymentUpdated;
     }
 
     /**
-     * @param Payment $payment
-     *
-     * @return bool
-     */
-    private function invoiceNotBelongsClient(Payment $payment)
-    {
-        $invoice = $payment->getInvoice();
-        $client  = $payment->getClient();
-        if ($invoice && $client && $invoice->getClient() !== $client) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Payment           $payment
-     * @param InputPayment $input
+     * @param BatchPayment      $batchPayment
+     * @param InputBatchPayment $input
      *
      * @param array             $requestFields
      *
-     * @return Payment
+     * @return BatchPayment
      */
-    private function patchClass(Payment $payment, InputPayment $input, array $requestFields)
+    private function patchClass(BatchPayment $batchPayment, InputBatchPayment $input, array $requestFields)
     {
-        if (array_key_exists('invoice_id', $requestFields)) {
-            $invoice = $this->getInvoice($input->getInvoiceId());
-            $payment->setInvoice($invoice);
-        }
-
         if (array_key_exists('uuid1c', $requestFields)) {
-            $payment->setUuid1c($input->getUuid1c());
+            $batchPayment->setUuid1c($input->getUuid1c());
         }
 
-        return $payment;
+        return $batchPayment;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return RemoteAccount
+     */
+    private function getRemoteAccount($remoteId)
+    {
+        $remoteAccount = $this->getRepository(RemoteAccount::class)->findOneBy(['remoteId' => (integer)$remoteId]);
+        if (!$remoteAccount) {
+            throw $this->createNotFoundException('site account not found');
+        }
+
+        return $remoteAccount;
     }
 
     /**
@@ -551,63 +405,70 @@ class PaymentController extends AbstractController
     /**
      * @param $param
      *
-     * @return Payment
+     * @return BatchPayment
      */
     private function findOneBy($param)
     {
-        return $this->getRepository(Payment::class)->findOneBy($param);
+        return $this->getRepository(BatchPayment::class)->findOneBy($param);
     }
 
     /**
-     * @param Payment      $payment
-     * @param InputPayment $input
+     * @param BatchPayment      $payment
+     * @param InputBatchPayment $input
      *
-     * @return Payment
+     * @return BatchPayment
      */
-    private function postClass(Payment $payment, InputPayment $inputPayment)
+    private function postClass(BatchPayment $batchPayment, InputBatchPayment $input)
     {
-        $remoteId      = $inputPayment->getAccountId();
-        $remoteAccount = $this->getRemoteAccount($remoteId);
-        $payment->setRemoteAccount($remoteAccount);
+        if (!empty($input->getUuid1c())) {
+            $batchPayment->setUuid1c($input->getUuid1c());
+        }
 
-        $client = $remoteAccount->getClient();
-        $payment->setClient($client);
+        $inputPayments = $input->getPayments();
 
-        if (!empty($inputPayment->getInvoiceId())) {
-            $invoiceId            = $inputPayment->getInvoiceId();
-            $invoice              = $this->getInvoice($invoiceId);
-            $invoiceRemoteAccount = $invoice->getRemoteAccount();
+        foreach ($inputPayments as $inputPayment) {
+            $payment = new Payment();
 
-            if ($invoiceRemoteAccount->getRemoteId() !== $remoteId) {
-                throw $this->createNotFoundException("Invoice: $invoiceId - does not belong to the client");
+            $remoteId      = $inputPayment->getAccountId();
+            $remoteAccount = $this->getRemoteAccount($remoteId);
+            $payment->setRemoteAccount($remoteAccount);
+
+            $client = $remoteAccount->getClient();
+            $payment->setClient($client);
+
+            if (!empty($inputPayment->getInvoiceId())) {
+                $invoiceId            = $inputPayment->getInvoiceId();
+                $invoice              = $this->getInvoice($invoiceId);
+                $invoiceRemoteAccount = $invoice->getRemoteAccount();
+
+                if ($invoiceRemoteAccount->getRemoteId() !== $remoteId) {
+                    throw $this->createNotFoundException("Invoice: $invoiceId - does not belong to the client");
+                }
+
+                $payment->setInvoice($invoice);
             }
 
-            $payment->setInvoice($invoice);
+            $payment->setAmount($inputPayment->getAmount());
+
+            if (!empty($inputPayment->getComission())) {
+                $payment->setAmountCommission($inputPayment->getComission());
+            }
+
+            $payment->setPaymentType($inputPayment->getPaymentType());
+            $payment->setType($inputPayment->getType());
+            $payment->setDescription($inputPayment->getDescription());
+            $payment->setBatchPayment($batchPayment);
+
+            $batchPayment->addPayment($payment);
         }
 
-        $payment->setAmount($inputPayment->getAmount());
-
-        if (!empty($inputPayment->getComission())) {
-            $payment->setAmountCommission($inputPayment->getComission());
-        }
-
-        $payment->setPaymentType($inputPayment->getPaymentType());
-        $payment->setType($inputPayment->getType());
-        $payment->setDescription($inputPayment->getDescription());
-
-        if ($inputPayment->getComission() !== null) {
-            $payment->setAmountCommission($inputPayment->getComission());
-        }
-
-        return $payment;
+        return $batchPayment;
     }
 
     /**
-     * @param InputPayment $input
-     *
      * @return array
      */
-    private function searchMap(InputPayment $input)
+    private function searchMap(SearchBatchPayment $input)
     {
         $fields = [];
 
@@ -619,36 +480,8 @@ class PaymentController extends AbstractController
             $fields['createdAt'] = $input->getCreatedAt();
         }
 
-        if ($input->getInvoiceId() !== null) {
-            $fields['invoice']['id'] = $input->getInvoiceId();
-        }
-
-        if ($input->getAmount() !== null) {
-            $fields['amount'] = $input->getAmount();
-        }
-
-        if ($input->getComission() !== null) {
-            $fields['amount_comission'] = $input->getComission();
-        }
-
-        if ($input->getCounteragentId() !== null) {
-            $fields['client']['counteragentId'] = $input->getCounteragentId();
-        }
-
-        if ($input->getAccountId() !== null) {
-            $fields['remoteAccount']['remoteId'] = $input->getAccountId();
-        }
-
-        if ($input->getPaymentType() !== null) {
-            $fields['paymentType'] = $input->getPaymentType();
-        }
-
-        if ($input->getType() !== null) {
-            $fields['type'] = $input->getType();
-        }
-
-        if ($input->getDescription() !== null) {
-            $fields['description'] = $input->getDescription();
+        if ($input->getComment() !== null) {
+            $fields['comment'] = $input->getComment();
         }
 
         return $fields;
@@ -668,7 +501,7 @@ class PaymentController extends AbstractController
         $order = [];
 
         if (isset($_order['id'])) {
-            $order['operation'] = $_order['id'];
+            $order['id'] = $_order['id'];
         }
 
         if (isset($_order['created'])) {
@@ -688,49 +521,6 @@ class PaymentController extends AbstractController
         }
 
         return $order;
-    }
-
-    /**
-     * @param $id
-     *
-     * @return RemoteAccount
-     */
-    private function getRemoteAccount($remoteId)
-    {
-        $remoteAccount = $this->getRepository(RemoteAccount::class)->findOneBy(['remoteId' => (integer)$remoteId]);
-        if (!$remoteAccount) {
-            throw $this->createNotFoundException('site account not found');
-        }
-
-        return $remoteAccount;
-    }
-
-    /**
-     * @param $accountId
-     *
-     * @return Response
-     */
-    private function billingNotFound($accountId)
-    {
-
-        $invalid[] = [
-            'field'   => 'counteragent_id',
-            'value'   => $accountId,
-            'message' => 'Billing account not found'
-        ];
-
-        $code = Response::HTTP_NOT_FOUND;
-
-        $view = $this->view([
-            'error' => [
-                'code'    => $code,
-                'message' => '404 Not Found',
-                'fields'  => $invalid
-            ]
-        ], $code);
-
-        return $this->handleView($view);
-
     }
 
 }
