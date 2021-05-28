@@ -420,10 +420,6 @@ class BatchPaymentController extends AbstractController
      */
     private function postClass(BatchPayment $batchPayment, InputBatchPayment $input)
     {
-        if (!empty($input->getUuid1c())) {
-            $batchPayment->setUuid1c($input->getUuid1c());
-        }
-
         $inputPayments = $input->getPayments();
 
         foreach ($inputPayments as $inputPayment) {
@@ -452,6 +448,10 @@ class BatchPaymentController extends AbstractController
 
             if (!empty($inputPayment->getComission())) {
                 $payment->setAmountCommission($inputPayment->getComission());
+            }
+
+            if (!empty($input->getUuid1c())) {
+                $batchPayment->setUuid1c($input->getUuid1c());
             }
 
             $payment->setPaymentType($inputPayment->getPaymentType());

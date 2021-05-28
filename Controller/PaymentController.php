@@ -591,6 +591,10 @@ class PaymentController extends AbstractController
             $payment->setAmountCommission($inputPayment->getComission());
         }
 
+        if (!empty($inputPayment->getUuid1c())) {
+            $payment->setUuid1c($inputPayment->getUuid1c());
+        }
+
         $payment->setPaymentType($inputPayment->getPaymentType());
         $payment->setType($inputPayment->getType());
         $payment->setDescription($inputPayment->getDescription());
