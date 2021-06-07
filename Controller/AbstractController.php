@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\Exclusion\GroupsExclusionStrategy;
 use JMS\Serializer\SerializationContext;
+use LaxCorp\BillingPartnerBundle\Helper\AccountHelper;
 use LaxCorp\BillingPartnerBundle\Helper\CustomerHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -100,6 +101,11 @@ abstract class AbstractController extends AbstractFOSRestController
     public $clientHelper;
 
     /**
+     * @var AccountHelper
+     */
+    public $accountHelper;
+
+    /**
      * @var JiraApi
      */
     public $jiraApi;
@@ -117,6 +123,7 @@ abstract class AbstractController extends AbstractFOSRestController
         EventDispatcherInterface $eventDispatcher,
         CustomerHelper $customerHelper,
         ClientHelper $clientHelper,
+        AccountHelper $accountHelper,
         JiraApi $jiraApi
     ) {
         $this->translator                   = $translator;
@@ -132,6 +139,7 @@ abstract class AbstractController extends AbstractFOSRestController
         $this->legacyDispatcher             = LegacyEventDispatcherProxy::decorate($eventDispatcher);
         $this->customerHelper               = $customerHelper;
         $this->clientHelper                 = $clientHelper;
+        $this->accountHelper                = $accountHelper;
         $this->jiraApi                      = $jiraApi;
     }
 
@@ -304,10 +312,28 @@ abstract class AbstractController extends AbstractFOSRestController
      */
     protected function prepareRemoteAccount(RemoteAccount $remoteAccount): void
     {
+        $remoteId = $remoteAccount->getRemoteId();
+        $account = $this->accountHelper->getAccount($remoteId);
+
+        if(!$account || !$account->getId()){
+            return;
+        }
+
+        $remoteAccount->setAccount($account);
+
         $profiles = $remoteAccount->getProfiles();
         foreach ($profiles as $profile) {
             $customerId = $profile->getCustomerId();
-            $profile->setCustomer($this->customerHelper->getCustomer($customerId));
+            if(is_null($customerId)){
+                continue;
+            }
+
+            $customer = $this->customerHelper->getCustomer($customerId);
+            if(is_null($customer)){
+                continue;
+            }
+
+            $profile->setCustomer($customer);
         }
     }
 

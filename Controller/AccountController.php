@@ -104,10 +104,15 @@ class AccountController extends AbstractController
 
         /** @var RemoteAccount[] $remoteAccounts */
         $remoteAccounts = $matcherResult->getList();
+        $resultRemoteAccounts = [];
         foreach ($remoteAccounts as $remoteAccount) {
             $this->prepareRemoteAccount($remoteAccount);
+            $account = $remoteAccount->getAccount();
+            if($account && $account->getId()) {
+                $resultRemoteAccounts[] = $remoteAccount;
+            }
         }
-        $view = $this->view($remoteAccounts, $statusCode, $headers);
+        $view = $this->view($resultRemoteAccounts, $statusCode, $headers);
         $this->setContentRangeHeader($view, $offset, $limit, $matcherResult->getTotal());
 
         return $this->handleView($view);
@@ -132,6 +137,13 @@ class AccountController extends AbstractController
     {
         $remoteAccount = $this->getRemoteAccount($id);
         $this->prepareRemoteAccount($remoteAccount);
+
+        $account = $remoteAccount->getAccount();
+
+        if(!$account || !$account->getId()){
+            throw $this->createNotFoundException('account not found');
+        }
+
         return $remoteAccount;
     }
 
@@ -142,9 +154,10 @@ class AccountController extends AbstractController
      */
     private function getRemoteAccount($id)
     {
+        /** @var RemoteAccount $remoteAccount */
         $remoteAccount = $this->getRepository(RemoteAccount::class)->findOneBy(['remoteId' => (integer)$id]);
         if (!$remoteAccount) {
-            throw $this->createNotFoundException('client not found');
+            throw $this->createNotFoundException('account not found');
         }
 
         return $remoteAccount;

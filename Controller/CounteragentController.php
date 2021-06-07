@@ -203,6 +203,10 @@ class CounteragentController extends AbstractController
             $remoteAccounts = $client->getRemoteAccounts();
             foreach ($remoteAccounts as $remoteAccount) {
                 $this->prepareRemoteAccount($remoteAccount);
+                $account = $remoteAccount->getAccount();
+                if(!$account || !$account->getId()){
+                    $client->removeRemoteAccounts($remoteAccount);
+                }
             }
         }
 
@@ -234,6 +238,10 @@ class CounteragentController extends AbstractController
         $remoteAccounts = $client->getRemoteAccounts();
         foreach ($remoteAccounts as $remoteAccount) {
             $this->prepareRemoteAccount($remoteAccount);
+            $account = $remoteAccount->getAccount();
+            if(!$account || !$account->getId()){
+                $client->removeRemoteAccounts($remoteAccount);
+            }
         }
         return $client;
     }
