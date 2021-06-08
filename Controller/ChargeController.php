@@ -314,10 +314,10 @@ class ChargeController extends AbstractController
             $separator = '';
             foreach($remoteAccounts as $remoteAccount){
                 $remoteId = $remoteAccount->getRemoteId();
-                $accountSearchValue .= $separator . '=' . $remoteId;
+                $accountSearchValue .= $separator . $remoteId;
                 $separator = '|';
             }
-            $fields['account.id'] = $accountSearchValue;
+            $fields['account.id'] = '^' . $accountSearchValue;
 
         } else if ($input->getAccountId() !== null) {
             $fields['account.id'] = $input->getAccountId();
