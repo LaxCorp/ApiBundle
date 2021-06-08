@@ -2,6 +2,8 @@
 
 namespace LaxCorp\ApiBundle\Controller;
 
+use App\Entity\Client;
+use App\Entity\RemoteAccount;
 use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -67,6 +69,13 @@ class ChargeController extends AbstractController
      *     ),
      *     @SWG\Parameter(
      *         name="account_id",
+     *         in="query",
+     *         description="",
+     *         required=false,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         name="counteragent_id",
      *         in="query",
      *         description="",
      *         required=false,
@@ -146,6 +155,7 @@ class ChargeController extends AbstractController
 
         /** @var InputCharge $input */
         $input  = $this->requestMap(InputCharge::class, $request->query->all());
+
         $fields = $this->searchMap($input);
 
         $result = $this->searchAccountOperations($fields, $_limit, $_page, $order);
@@ -175,7 +185,13 @@ class ChargeController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        return (array)$this->chargeOut($result);
+        $acountOperations = (array)$this->chargeOut($result);
+
+        if (empty($acountOperations)) {
+            throw new NotFoundHttpException();
+        }
+
+        return $acountOperations;
     }
 
     /**
@@ -223,7 +239,12 @@ class ChargeController extends AbstractController
         $result = $this->accountOperationHelper->find($searchQuery);
 
         foreach ($result as $accountOperations) {
-            $return->items[] = (array)$this->chargeOut($accountOperations);
+            $acountOperations = (array)$this->chargeOut($accountOperations);
+            if (empty($acountOperations)) {
+                continue;
+            }
+
+            $return->items[] = $acountOperations;
         }
 
         return $return;
@@ -236,17 +257,24 @@ class ChargeController extends AbstractController
      */
     private function chargeOut(AccountOperation $charge)
     {
-        $o               = (object)[];
-        $o->id           = $charge->getId();
-        $o->created      = $charge->getCreated();
-        $o->closed       = $charge->getClosed();
-        $o->amount       = $charge->getAmount();
-        $o->account_id   = $charge->getAccount()->getId();
-        $o->type         = $charge->getReason();
-        $o->tariff_name  = $charge->getTariffName();
-        $o->clicks_count = $charge->getClicksCount();
-        $o->multiplier   = $charge->getMultiplier();
-        $o->description  = $charge->getDescription();
+        $o = (object)[];
+
+        $remoteId = $charge->getAccount()->getId();
+
+        /** @var RemoteAccount $remoteAccount */
+        $remoteAccount = $this->getRepository(RemoteAccount::class)->findOneBy(['remoteId' => (integer)$remoteId]);
+
+        $o->id              = $charge->getId();
+        $o->created         = $charge->getCreated();
+        $o->closed          = $charge->getClosed();
+        $o->amount          = $charge->getAmount();
+        $o->counteragent_id = ($remoteAccount) ? $remoteAccount->getCounteragetId() : null;
+        $o->account_id      = $remoteId;
+        $o->type            = $charge->getReason();
+        $o->tariff_name     = $charge->getTariffName();
+        $o->clicks_count    = $charge->getClicksCount();
+        $o->multiplier      = $charge->getMultiplier();
+        $o->description     = $charge->getDescription();
 
         return $o;
     }
@@ -272,8 +300,27 @@ class ChargeController extends AbstractController
             $fields['amount'] = $input->getAmount();
         }
 
-        if ($input->getCouteragentId() !== null) {
-            $fields['account.id'] = $input->getCouteragentId();
+        if ($input->getCounteragentId() !== null) {
+            /** @var Client $client */
+            $client = $this->getRepository(Client::class)
+                ->findOneBy(['counteragentId' => (integer)$input->getCounteragentId()]);
+            if(!$client){
+                throw new NotFoundHttpException();
+            }
+
+            $remoteAccounts = $client->getRemoteAccounts();
+
+            $accountSearchValue = '';
+            $separator = '';
+            foreach($remoteAccounts as $remoteAccount){
+                $remoteId = $remoteAccount->getRemoteId();
+                $accountSearchValue .= $separator . '=' . $remoteId;
+                $separator = '|';
+            }
+            $fields['account.id'] = $accountSearchValue;
+
+        } else if ($input->getAccountId() !== null) {
+            $fields['account.id'] = $input->getAccountId();
         }
 
         $type = $input->getType();

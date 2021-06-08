@@ -65,7 +65,16 @@ class InputCharge
      * @Serializer\Type("integer")
      * @Serializer\Expose()
      */
-    private $couteragentId;
+    private $accountId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     * @Serializer\Type("integer")
+     * @Serializer\Expose()
+     */
+    private $counteragentId;
 
     /**
      * SUBSCRIPTION | OVERUSE_CLICKS | REFILL | MONEYBACK | PACKET_ACQUISITION
@@ -186,17 +195,33 @@ class InputCharge
     /**
      * @return int
      */
-    public function getCouteragentId()
+    public function getAccountId()
     {
-        return $this->couteragentId;
+        return $this->accountId;
     }
 
     /**
-     * @param int $couteragentId
+     * @param int $accountId
      */
-    public function setCouteragentId($couteragentId)
+    public function setAccountId($accountId)
     {
-        $this->couteragentId = $couteragentId;
+        $this->accountId = $accountId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCounteragentId()
+    {
+        return $this->counteragentId;
+    }
+
+    /**
+     * @param int $counteragentId
+     */
+    public function setCounteragentId($counteragentId)
+    {
+        $this->counteragentId = $counteragentId;
     }
 
     /**
