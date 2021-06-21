@@ -62,7 +62,7 @@ class InvoiceController extends AbstractController
      *         type="string"
      *     ),
      *     @SWG\Parameter(
-     *         name="couteragent_id",
+     *         name="counteragent_id",
      *         in="query",
      *         description="",
      *         required=false,
@@ -163,8 +163,8 @@ class InvoiceController extends AbstractController
             $fields['paidAmount'] = $input->getPaidAmount();
         }
 
-        if ($input->getCouteragentId() !== null) {
-            $fields['client']['counteragentId'] = $input->getCouteragentId();
+        if ($input->getCounteragentId() !== null) {
+            $fields['client']['counteragentId'] = $input->getCounteragentId();
         }
 
         return $fields;
@@ -200,8 +200,8 @@ class InvoiceController extends AbstractController
             $order['paidAmount'] = $_order['paid_amount'];
         }
 
-        if (isset($_order['couteragent_id'])) {
-            $order['client']['id'] = $_order['couteragent_id'];
+        if (isset($_order['counteragent_id'])) {
+            $order['client']['id'] = $_order['counteragent_id'];
         }
 
         return $order;

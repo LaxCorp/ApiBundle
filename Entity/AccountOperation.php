@@ -13,7 +13,7 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @Serializer\ExclusionPolicy("all")
  * @Serializer\AccessorOrder("custom", custom = {
- *     "id", "createdDate", "closedDate", "amount", "couteragentId", "reason"
+ *     "id", "createdDate", "closedDate", "amount", "counteragentId", "reason"
  * })
  */
 class AccountOperation
@@ -156,9 +156,9 @@ class AccountOperation
     /**
      * @Serializer\VirtualProperty
      * @Serializer\Type("integer")
-     * @Serializer\SerializedName("couteragent_id")
+     * @Serializer\SerializedName("counteragent_id")
      */
-    public function getCouteragentId()
+    public function getCounteragentId()
     {
         $account = $this->getAccount();
         if (!$account) {

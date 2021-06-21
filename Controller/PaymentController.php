@@ -85,7 +85,7 @@ class PaymentController extends AbstractController
      *         type="string"
      *     ),
      *     @SWG\Parameter(
-     *         name="couteragent_id",
+     *         name="counteragent_id",
      *         in="query",
      *         description="",
      *         required=false,
@@ -320,12 +320,12 @@ class PaymentController extends AbstractController
             $invalid[] = [
                 'field'   => 'invoice_id',
                 'value'   => $paymentUpdated->getInvoice(),
-                'message' => 'Required: invoice_id || couteragent_id'
+                'message' => 'Required: invoice_id || counteragent_id'
             ];
             $invalid[] = [
-                'field'   => 'couteragent_id',
+                'field'   => 'counteragent_id',
                 'value'   => $paymentUpdated->getInvoice(),
-                'message' => 'Required: couteragent_id || invoice_id'
+                'message' => 'Required: counteragent_id || invoice_id'
             ];
 
             return $this->errorView($conflicts, $invalid);
@@ -366,7 +366,7 @@ class PaymentController extends AbstractController
             $em->persist($paymentUpdated);
             $em->flush();
         } catch (ResourceNotFoundException $e) {
-            return $this->billingNotFound($paymentUpdated->getCouteragentId());
+            return $this->billingNotFound($paymentUpdated->getCounteragentId());
         }
 
         $view = $this->view($paymentUpdated, Response::HTTP_CREATED);
@@ -489,7 +489,7 @@ class PaymentController extends AbstractController
             $em->persist($paymentUpdated);
             $em->flush();
         } catch (ResourceNotFoundException $e) {
-            return $this->billingNotFound($paymentUpdated->getCouteragentId());
+            return $this->billingNotFound($paymentUpdated->getCounteragentId());
         }
 
         return $paymentUpdated;
@@ -683,8 +683,8 @@ class PaymentController extends AbstractController
             $order['amount'] = $_order['amount'];
         }
 
-        if (isset($_order['couteragent_id'])) {
-            $order['client']['id'] = $_order['couteragent_id'];
+        if (isset($_order['counteragent_id'])) {
+            $order['client']['id'] = $_order['counteragent_id'];
         }
 
         if (isset($_order['invoice_id'])) {

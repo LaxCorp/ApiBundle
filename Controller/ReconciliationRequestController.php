@@ -48,7 +48,7 @@ class ReconciliationRequestController extends AbstractController
      *         type="string"
      *     ),
      *     @SWG\Parameter(
-     *         name="couteragent_id",
+     *         name="counteragent_id",
      *         in="query",
      *         description="",
      *         required=false,
@@ -171,7 +171,7 @@ class ReconciliationRequestController extends AbstractController
      *     tags={"Запрос на смену акт сверки (reconciliation_request)"},
      *     summary="",
      *     @SWG\Parameter(
-     *         name="couteragent_id",
+     *         name="counteragent_id",
      *         in="formData",
      *         description="",
      *         required=false,
@@ -305,8 +305,8 @@ class ReconciliationRequestController extends AbstractController
     private function patchClass(
         ReconciliationRequest $ReconciliationRequest, InputReconciliationRequest $input, array $requestFields
     ) {
-        if (array_key_exists('couteragent_id', $requestFields)) {
-            $ReconciliationRequest->setClient($this->getClient($input->getCouteragentId()));
+        if (array_key_exists('counteragent_id', $requestFields)) {
+            $ReconciliationRequest->setClient($this->getClient($input->getCounteragentId()));
         }
 
         if (array_key_exists('date_from', $requestFields)) {
@@ -362,8 +362,8 @@ class ReconciliationRequestController extends AbstractController
     {
         $fields = [];
 
-        if ($input->getCouteragentId() !== null) {
-            $fields['client']['counteragentId'] = $input->getCouteragentId();
+        if ($input->getCounteragentId() !== null) {
+            $fields['client']['counteragentId'] = $input->getCounteragentId();
         }
 
         if ($input->getDateFrom() !== null) {
@@ -419,8 +419,8 @@ class ReconciliationRequestController extends AbstractController
             $order['completed'] = $_order['completed'];
         }
 
-        if (isset($_order['couteragent_id'])) {
-            $order['client']['id'] = $_order['couteragent_id'];
+        if (isset($_order['counteragent_id'])) {
+            $order['client']['id'] = $_order['counteragent_id'];
         }
 
         return $order;

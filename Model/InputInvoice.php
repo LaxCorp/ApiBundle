@@ -63,7 +63,7 @@ class InputInvoice
      * @Serializer\Type("integer")
      * @Serializer\Expose()
      */
-    private $couteragentId;
+    private $counteragentId;
 
     /**
      * @return int
@@ -136,17 +136,17 @@ class InputInvoice
     /**
      * @return int
      */
-    public function getCouteragentId()
+    public function getCounteragentId()
     {
-        return $this->couteragentId;
+        return $this->counteragentId;
     }
 
     /**
-     * @param int $couteragentId
+     * @param int $counteragentId
      */
-    public function setCouteragentId($couteragentId)
+    public function setCounteragentId($counteragentId)
     {
-        $this->couteragentId = $couteragentId;
+        $this->counteragentId = $counteragentId;
     }
 
 }

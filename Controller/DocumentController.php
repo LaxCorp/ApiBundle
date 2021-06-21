@@ -289,9 +289,9 @@ class DocumentController extends AbstractController
         if ($form->isSubmitted()) {
             if (!$documents->getCounteragentId()) {
                 $invalid[] = [
-                    'field'   => 'couteragent_id',
+                    'field'   => 'counteragent_id',
                     'value'   => $documents->getCounteragentId(),
-                    'message' => 'Required: couteragent_id'
+                    'message' => 'Required: counteragent_id'
                 ];
             }
 

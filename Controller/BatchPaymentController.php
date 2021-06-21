@@ -512,8 +512,8 @@ class BatchPaymentController extends AbstractController
             $order['amount'] = $_order['amount'];
         }
 
-        if (isset($_order['couteragent_id'])) {
-            $order['client']['id'] = $_order['couteragent_id'];
+        if (isset($_order['counteragent_id'])) {
+            $order['client']['id'] = $_order['counteragent_id'];
         }
 
         if (isset($_order['invoice_id'])) {
