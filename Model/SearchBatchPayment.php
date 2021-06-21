@@ -28,6 +28,14 @@ class SearchBatchPayment
     /**
      * @var string
      *
+     * @ORM\Column(name="updated", type="string", length=255, nullable=true)
+     * @Serializer\Type("string")
+     */
+    private $updatedAt;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      * @Serializer\Type("string")
      */
@@ -54,6 +62,21 @@ class SearchBatchPayment
     public function setCreatedAt(?string $createdAt): SearchBatchPayment
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdatedAt(): ?string
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?string $updatedAt): SearchBatchPayment
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

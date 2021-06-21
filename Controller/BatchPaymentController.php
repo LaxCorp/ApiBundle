@@ -66,6 +66,13 @@ class BatchPaymentController extends AbstractController
      *         type="string"
      *     ),
      *     @SWG\Parameter(
+     *         name="updated",
+     *         in="query",
+     *         description="readOnly",
+     *         required=false,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
      *         name="comment",
      *         in="query",
      *         description="",
@@ -480,6 +487,10 @@ class BatchPaymentController extends AbstractController
             $fields['createdAt'] = $input->getCreatedAt();
         }
 
+        if ($input->getUpdatedAt() !== null) {
+            $fields['updatedAt'] = $input->getUpdatedAt();
+        }
+
         if ($input->getComment() !== null) {
             $fields['comment'] = $input->getComment();
         }
@@ -506,6 +517,10 @@ class BatchPaymentController extends AbstractController
 
         if (isset($_order['created'])) {
             $order['createdAt'] = $_order['created'];
+        }
+
+        if (isset($_order['updated'])) {
+            $order['updatedAt'] = $_order['updated'];
         }
 
         return $order;
